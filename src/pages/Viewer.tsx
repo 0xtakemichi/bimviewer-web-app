@@ -12,7 +12,7 @@ import camera from "../components/Toolbars/Sections/Camera";
 import selection from "../components/Toolbars/Sections/Selection";
 import { AppManager } from "../bim-components";
 
-const IFCViewer: React.FC = () => {
+const Viewer: React.FC = () => {
   useEffect(() => {
 
     const initViewer = async () => {
@@ -150,6 +150,7 @@ const IFCViewer: React.FC = () => {
 
       //const appContainer = document.getElementById("app") as HTMLElement
       const body = document.querySelector("body");
+      //const app = document.querySelector("bim-grid") as BUI.Grid;
       const app = document.createElement("bim-grid") as BUI.Grid;
       //body!.innerHTML = "";
       body!.appendChild(app);
@@ -193,18 +194,18 @@ const IFCViewer: React.FC = () => {
       viewportGrid.layout = "main";
     };
 
+    initViewer();
     // Cleanup function
     return () => {
       const container = document.querySelector("bim-grid");
       if (container) {
         container.remove();
-      }else{
-        initViewer();
       }
+      console.log("Componente desmontado y limpieza realizada")
     };
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, []);
 
   return null;
 };
 
-export default IFCViewer;
+export default Viewer;

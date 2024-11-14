@@ -1,0 +1,80 @@
+/* styles.css */
+
+/* Variables de color */
+:root {
+    --navbar-bg-color: #343a40;
+    --navbar-brand-color: #f8f9fa;
+    --navbar-link-color: #f8f9fa;
+    --navbar-link-hover-color: #007bff;
+    --navbar-btn-color: #ff4757;
+    --navbar-padding: 1rem;
+  }
+  
+  /* Estilo de la barra de navegación */
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--navbar-padding);
+    background-color: var(--navbar-bg-color);
+    color: var(--navbar-brand-color);
+  }
+  
+  .navbar-brand {
+    color: var(--navbar-brand-color);
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-decoration: none;
+    margin-right: 1rem;
+  }
+  
+  .navbar-brand:hover {
+    color: var(--navbar-link-hover-color);
+  }
+  
+  /* Menú de navegación */
+  .navbar-nav {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+    margin: 0;
+  }
+  
+  .navbar-link {
+    color: var(--navbar-link-color);
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 0.5rem;
+    transition: color 0.3s ease;
+  }
+  
+  .navbar-link:hover {
+    color: var(--navbar-link-hover-color);
+  }
+  
+  .navbar-btn {
+    color: var(--navbar-btn-color);
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .navbar-btn:hover {
+    color: darken(var(--navbar-btn-color), 10%);
+  }
+  
+  /* Ajustes para la disposición en dispositivos móviles */
+  @media (max-width: 768px) {
+    .navbar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .navbar-nav {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+  

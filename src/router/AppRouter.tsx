@@ -8,6 +8,7 @@ import Dashboard from '../pages/Dashboard';
 import Viewer from "../pages/Viewer";
 import { logout } from '../helpers/auth';
 import { firebaseAuth } from '../firebase/index';
+import '../styles/navbar.css';
 
 interface RouteProps {
   component: React.ComponentType<any>;
@@ -53,78 +54,63 @@ class AppRouter extends Component<{}, { authed: boolean; loading: boolean }> {
     ) : (
       <BrowserRouter>
         <div>
-          <nav className="navbar navbar-default navbar-static-top">
-            <div className="container">
-              <div className="navbar-header">
-                <Link to="/" className="navbar-brand">
-                  IngeBIM Viewer
+          <nav className="navbar">
+            <Link to="/" className="navbar-brand">
+              IngeBIM Viewer
+            </Link>
+            <ul className="navbar-nav">
+              <li>
+                <Link to="/" className="navbar-link">
+                  Home
                 </Link>
-              </div>
-              <ul className="nav navbar-nav pull-right">
+              </li>
+              <li>
+                <Link to="/dashboard" className="navbar-link">
+                  Dashboard
+                </Link>
+              </li>
+              <li>
+                <Link to="/viewer" className="navbar-link">
+                  Viewer
+                </Link>
+              </li>
+              {this.state.authed ? (
                 <li>
-                  <Link to="/" className="navbar-brand">
-                    Home
-                  </Link>
+                  <button
+                    onClick={() => {
+                      logout();
+                      this.setState({ authed: false });
+                    }}
+                    className="navbar-btn"
+                  >
+                    Logout
+                  </button>
                 </li>
-                <li>
-                  <Link to="/dashboard" className="navbar-brand">
-                    Dashboard
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/viewer" className="navbar-brand">
-                    Viewer
-                  </Link>
-                </li>
-                <li>
-                  {this.state.authed ? (
-                    <button
-                      style={{ border: 'none', background: 'transparent' }}
-                      onClick={() => {
-                        logout();
-                        this.setState({ authed: false });
-                      }}
-                      className="navbar-brand"
-                    >
-                      Logout
-                    </button>
-                  ) : (
-                    <span>
-                      <Link to="/login" className="navbar-brand">
-                        Login
-                      </Link>
-                      <Link to="/register" className="navbar-brand">
-                        Register
-                      </Link>
-                    </span>
-                  )}
-                </li>
-              </ul>
-            </div>
+              ) : (
+                <>
+                  <li>
+                    <Link to="/login" className="navbar-link">
+                      Login
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/register" className="navbar-link">
+                      Register
+                    </Link>
+                  </li>
+                </>
+              )}
+            </ul>
           </nav>
           <div className="container">
-            <div className="row">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route
-                  path="/login"
-                  element={<PublicRoute authed={this.state.authed} component={Login} />}
-                />
-                <Route
-                  path="/register"
-                  element={<PublicRoute authed={this.state.authed} component={Register} />}
-                />
-                <Route
-                  path="/dashboard"
-                  element={<PrivateRoute authed={this.state.authed} component={Dashboard} />}
-                />
-                <Route
-                  path="/viewer"
-                  element={<PrivateRoute authed={this.state.authed} component={Viewer} />}
-                />
-                <Route path="*" element={<h3>No Match</h3>} />
-              </Routes>
-            </div>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<PublicRoute authed={this.state.authed} component={Login} />} />
+              <Route path="/register" element={<PublicRoute authed={this.state.authed} component={Register} />} />
+              <Route path="/dashboard" element={<PrivateRoute authed={this.state.authed} component={Dashboard} />} />
+              <Route path="/viewer" element={<PrivateRoute authed={this.state.authed} component={Viewer} />} />
+              <Route path="*" element={<h3>No Match</h3>} />
+            </Routes>
           </div>
         </div>
       </BrowserRouter>

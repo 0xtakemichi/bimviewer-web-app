@@ -1,6 +1,7 @@
 // Register.tsx
 import React, { Component, FormEvent } from 'react';
 import { auth } from '../helpers/auth';
+import '../styles/auth.css';
 
 interface RegisterState {
   registerError: string | null;
@@ -14,7 +15,6 @@ function setErrorMsg(error: { message: string }) {
 
 export default class Register extends Component<{}, RegisterState> {
   state: RegisterState = { registerError: null };
-
   // Definimos las referencias tipadas
   private emailRef = React.createRef<HTMLInputElement>();
   private pwRef = React.createRef<HTMLInputElement>();
@@ -34,8 +34,8 @@ export default class Register extends Component<{}, RegisterState> {
 
   render() {
     return (
-      <div className="col-sm-6 col-sm-offset-3">
-        <h1>Register</h1>
+      <div className="login-container">
+        <h1 className="login-title">Register</h1>
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">
             <label>Email</label>
@@ -55,13 +55,8 @@ export default class Register extends Component<{}, RegisterState> {
             />
           </div>
           {this.state.registerError && (
-            <div className="alert alert-danger" role="alert">
-              <span
-                className="glyphicon glyphicon-exclamation-sign"
-                aria-hidden="true"
-              ></span>
-              <span className="sr-only">Error:</span>
-              &nbsp;{this.state.registerError}
+            <div className="alert" role="alert">
+              {this.state.registerError}
             </div>
           )}
           <button type="submit" className="btn btn-primary">

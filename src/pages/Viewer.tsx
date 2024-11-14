@@ -197,11 +197,11 @@ const Viewer: React.FC = () => {
     initViewer();
     // Cleanup function
     return () => {
-      const container = document.querySelector("bim-grid");
-      if (container) {
-        container.remove();
+      const bim_grid = document.querySelector("bim-grid");
+      if (bim_grid) {
+        bim_grid.remove();
       }
-      console.log("Componente desmontado y limpieza realizada")
+      // Componente desmontado y limpieza realizada
     };
   }, []);
 

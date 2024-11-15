@@ -8,10 +8,10 @@ import {
   signOut, 
   sendPasswordResetEmail, 
   sendEmailVerification, 
-  verifyBeforeUpdateEmail, // Importamos el método correcto
+  verifyBeforeUpdateEmail, 
   getAuth, 
   UserCredential,
-  ActionCodeSettings // Importamos para configurar la acción
+  ActionCodeSettings 
 } from 'firebase/auth';
 import { doc, setDoc, updateDoc } from 'firebase/firestore';
 
@@ -104,22 +104,33 @@ export async function updateUserEmail(newEmail: string) {
     throw new Error("No hay un usuario autenticado actualmente.");
   }
 
-  // Configuramos las opciones para la acción de verificación
   const actionCodeSettings: ActionCodeSettings = {
-    url: 'https://bimviewer.vercel.app/', // URL a la que se redirigirá después de la verificación
+    url: 'https://bimviewer.vercel.app/login', // URL para redirigir tras verificación
     handleCodeInApp: true,
   };
 
-  // Enviamos el correo de verificación al nuevo correo electrónico
   return await verifyBeforeUpdateEmail(user, newEmail, actionCodeSettings)
     .then(() => {
       console.log('Correo de verificación enviado al nuevo correo electrónico.');
-      // Aquí puedes informar al usuario que revise su nuevo correo para completar el cambio
     })
     .catch((error) => {
-      console.error('Error al enviar el correo de verificación al nuevo correo electrónico:', error);
+      console.error('Error al enviar el correo de verificación al nuevo correo:', error);
       throw error;
     });
+}
+
+// Función para sincronizar el correo electrónico con Firestore tras la verificación
+export async function syncFirestoreEmail(uid: string) {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (user) {
+    const userDocRef = doc(firestoreDb, 'Users', uid);
+    await updateDoc(userDocRef, { email: user.email });
+    console.log('Correo actualizado en Firestore:', user.email);
+  } else {
+    console.error('No hay un usuario autenticado para sincronizar.');
+  }
 }
 
 // Función para guardar el usuario en Firestore

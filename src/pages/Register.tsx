@@ -91,7 +91,7 @@ export default class Register extends Component<{}, RegisterState> {
               {this.state.registerError}
             </div>
           )}
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="register-btn">
             Sign Up
           </button>
         </form>

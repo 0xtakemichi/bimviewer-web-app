@@ -69,7 +69,7 @@ export default class Login extends Component<{}, LoginState> {
               </a>
             </div>
           )}
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="login-btn">
             Log In
           </button>
         </form>

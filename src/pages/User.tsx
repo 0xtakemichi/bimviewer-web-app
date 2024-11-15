@@ -55,7 +55,7 @@ export default class UserPage extends Component<{}, UserState> {
               success: "Email updated and synced with Firestore.",
             }));
           })
-          .catch((error) => {
+          .catch(() => {
             this.setState({ error: "Error syncing email with Firestore." });
           });
       }
@@ -141,71 +141,71 @@ export default class UserPage extends Component<{}, UserState> {
     }
 
     return (
-      <div className="user-container">
-        <h1>User Information</h1>
-        {success && <div className="alert alert-success">{success}</div>}
-        {userInfo && (
-          <div className="user-info">
-            <div>
-              <label>Email:</label>
-              <input
-                type="email"
-                name="email"
-                value={userInfo.email}
-                onChange={this.handleInputChange}
-                disabled={!editable}
-              />
-            </div>
-            <div>
-              <label>First Name:</label>
-              <input
-                type="text"
-                name="name"
-                value={userInfo.name}
-                onChange={this.handleInputChange}
-                disabled={!editable}
-              />
-            </div>
-            <div>
-              <label>Last Name:</label>
-              <input
-                type="text"
-                name="lastName"
-                value={userInfo.lastName}
-                onChange={this.handleInputChange}
-                disabled={!editable}
-              />
-            </div>
-            <div>
-              <label>Company:</label>
-              <input
-                type="text"
-                name="company"
-                value={userInfo.company}
-                onChange={this.handleInputChange}
-                disabled={!editable}
-              />
-            </div>
-            <div>
-              <p>Email Verified: {emailVerified ? "Yes" : "No"}</p>
-              {!emailVerified && (
-                <button onClick={this.verifyEmail} className="btn btn-warning">
-                  Verify Email
-                </button>
-              )}
-            </div>
-            {!editable ? (
-              <button onClick={this.toggleEdit} className="btn btn-primary">
-                Edit
-              </button>
-            ) : (
-              <button onClick={this.saveChanges} className="btn btn-success">
-                Save Changes
-              </button>
-            )}
-          </div>
+<div className="user-container">
+  <h1>User Information</h1>
+  {success && <div className="alert alert-success">{success}</div>}
+  {userInfo && (
+    <div className="user-info">
+      <div>
+        <label>Email:</label>
+        <input
+          type="email"
+          name="email"
+          value={userInfo.email}
+          onChange={this.handleInputChange}
+          disabled={!editable}
+        />
+      </div>
+      <div>
+        <label>First Name:</label>
+        <input
+          type="text"
+          name="name"
+          value={userInfo.name}
+          onChange={this.handleInputChange}
+          disabled={!editable}
+        />
+      </div>
+      <div>
+        <label>Last Name:</label>
+        <input
+          type="text"
+          name="lastName"
+          value={userInfo.lastName}
+          onChange={this.handleInputChange}
+          disabled={!editable}
+        />
+      </div>
+      <div>
+        <label>Company:</label>
+        <input
+          type="text"
+          name="company"
+          value={userInfo.company}
+          onChange={this.handleInputChange}
+          disabled={!editable}
+        />
+      </div>
+      <div className="button-group">
+        {!emailVerified && (
+          <button onClick={this.verifyEmail} className="btn btn-warning">
+            Verify Email
+          </button>
+        )}
+        {!editable ? (
+          <button onClick={this.toggleEdit} className="btn btn-primary">
+            Edit
+          </button>
+        ) : (
+          <button onClick={this.saveChanges} className="btn btn-success">
+            Save Changes
+          </button>
         )}
       </div>
+    </div>
+  )}
+</div>
+
     );
   }
 }

@@ -83,19 +83,19 @@ class AppRouter extends Component<{}, { authed: boolean; loading: boolean }> {
                     }}
                     className="navbar-btn"
                   >
-                    Logout
+                    Log Out
                   </button>
                 </li>
               ) : (
                 <>
                   <li>
                     <Link to="/login" className="navbar-link">
-                      Login
+                      LOG IN
                     </Link>
                   </li>
                   <li>
                     <Link to="/register" className="navbar-link">
-                      Register
+                      SIGN UP
                     </Link>
                   </li>
                 </>

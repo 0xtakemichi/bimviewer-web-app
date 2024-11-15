@@ -70,6 +70,7 @@ html.bim-ui-light {
 }
 
 body {
+  display: grid;
   height: 100vh;
 }
 

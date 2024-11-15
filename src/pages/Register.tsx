@@ -35,7 +35,7 @@ export default class Register extends Component<{}, RegisterState> {
   render() {
     return (
       <div className="login-container">
-        <h1 className="login-title">Register</h1>
+        <h1 className="login-title">Sign Up</h1>
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">
             <label>Email</label>
@@ -60,7 +60,7 @@ export default class Register extends Component<{}, RegisterState> {
             </div>
           )}
           <button type="submit" className="btn btn-primary">
-            Register
+            Sign Up
           </button>
         </form>
       </div>

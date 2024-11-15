@@ -42,7 +42,7 @@ export default class Login extends Component<{}, LoginState> {
   render() {
     return (
       <div className="login-container">
-        <h1 className="login-title">Login</h1>
+        <h1 className="login-title">Log In</h1>
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">
             <label>Email</label>
@@ -70,7 +70,7 @@ export default class Login extends Component<{}, LoginState> {
             </div>
           )}
           <button type="submit" className="btn btn-primary">
-            Login
+            Log In
           </button>
         </form>
       </div>

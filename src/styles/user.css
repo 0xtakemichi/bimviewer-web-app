@@ -1,0 +1,22 @@
+.user-container {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .user-info p {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  .user-info strong {
+    color: #333;
+  }
+  
+  .alert {
+    color: red;
+    font-weight: bold;
+  }
+  

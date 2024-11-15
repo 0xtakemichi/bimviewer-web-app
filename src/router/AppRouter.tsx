@@ -5,6 +5,7 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Home from '../pages/Home';
 import Dashboard from '../pages/Dashboard';
+import UserPage from '../pages/User';
 import Viewer from "../pages/Viewer";
 import { logout } from '../helpers/auth';
 import { firebaseAuth } from '../firebase/index';
@@ -75,17 +76,24 @@ class AppRouter extends Component<{}, { authed: boolean; loading: boolean }> {
                 </Link>
               </li>
               {this.state.authed ? (
-                <li>
-                  <button
-                    onClick={() => {
-                      logout();
-                      this.setState({ authed: false });
-                    }}
-                    className="navbar-btn"
-                  >
-                    Log Out
-                  </button>
-                </li>
+                <>
+                  <li>
+                  <Link to="/user" className="navbar-link">
+                    Profile
+                  </Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => {
+                        logout();
+                        this.setState({ authed: false });
+                      }}
+                      className="navbar-btn"
+                    >
+                      Log Out
+                    </button>
+                  </li>
+                </>
               ) : (
                 <>
                   <li>
@@ -109,6 +117,7 @@ class AppRouter extends Component<{}, { authed: boolean; loading: boolean }> {
               <Route path="/register" element={<PublicRoute authed={this.state.authed} component={Register} />} />
               <Route path="/dashboard" element={<PrivateRoute authed={this.state.authed} component={Dashboard} />} />
               <Route path="/viewer" element={<PrivateRoute authed={this.state.authed} component={Viewer} />} />
+              <Route path="/user" element={<PrivateRoute authed={this.state.authed} component={UserPage} />} />
               <Route path="*" element={<h3>No Match</h3>} />
             </Routes>
           </div>

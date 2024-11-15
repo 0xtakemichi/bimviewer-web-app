@@ -1,5 +1,5 @@
 // auth.ts
-import { ref, firebaseAuth } from '../firebase/index';
+import { firebaseAuth, firestoreDb } from '../firebase/index';
 import { 
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword, 
@@ -7,20 +7,29 @@ import {
   sendPasswordResetEmail, 
   UserCredential 
 } from 'firebase/auth';
-import { set, child } from 'firebase/database';
+import { doc, setDoc } from 'firebase/firestore'
+
 
 // Definimos una interfaz para el usuario
 interface User {
   uid: string;
   email: string | null;
+  name?: string;
+  lastName?: string;
+  company?: string;
 }
 
 // Modificamos `auth` para retornar `Promise<UserCredential>` sin problemas de tipo
-export function auth(email: string, pw: string): Promise<UserCredential> {
+export function auth(email: string, pw: string, additionalData: {name: string, lastName: string, company: string}): Promise<UserCredential> {
   return createUserWithEmailAndPassword(firebaseAuth, email, pw)
     .then((userCredential) => {
       // Guardamos el usuario en la base de datos y luego devolvemos el `userCredential`
-      return saveUser(userCredential.user).then(() => userCredential);
+      const user = userCredential.user;
+      return saveUser({
+        uid: user.uid,
+        email: user.email,
+        ...additionalData
+      }).then(() => userCredential);
     });
 }
 
@@ -37,10 +46,14 @@ export function resetPassword(email: string): Promise<void> {
 }
 
 export function saveUser(user: User): Promise<User> {
-  // Creamos una referencia usando `child` y `ref`
-  const userRef = child(ref, `users/${user.uid}/info`);
-  return set(userRef, {
+  // Guardar en Firestore bajo la colección `Users` con el UID como ID del documento
+  //const userRef = child(ref, `users/${user.uid}/info`);
+  const userRef = doc(firestoreDb, 'Users', user.uid);
+
+  return setDoc(userRef, {
     email: user.email,
-    uid: user.uid,
+    name: user.name,
+    lastName: user.lastName,
+    company: user.company
   }).then(() => user);
 }

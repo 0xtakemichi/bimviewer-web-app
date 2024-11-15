@@ -1,16 +1,29 @@
 // Dashboard.tsx
-import { Component } from 'react';
+import React from 'react';
+import { useAuth } from '../hooks/AuthContext';
 
-interface DashboardProps {}
+const Dashboard: React.FC = () => {
+  const { userData, loading } = useAuth();
 
-interface DashboardState {}
-
-export default class Dashboard extends Component<DashboardProps, DashboardState> {
-  render() {
-    return (
-      <div>
-        Dashboard. This is a protected route. You can only see this if you're authenticated.
-      </div>
-    );
+  if (loading) {
+    return <div>Loading...</div>;
   }
-}
+
+  return (
+    <div>
+      <h1>Dashboard</h1>
+      <p>This is a protected route. You can only see this if you're authenticated.</p>
+      {userData ? (
+        <div>
+          <h2>Welcome, {userData.name} {userData.lastName}!</h2>
+          <p>Email: {userData.email}</p>
+          <p>Company: {userData.company}</p>
+        </div>
+      ) : (
+        <p>No user data available.</p>
+      )}
+    </div>
+  );
+};
+
+export default Dashboard;

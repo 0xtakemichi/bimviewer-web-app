@@ -8,7 +8,7 @@ import {
 import '../styles/user.css';
 
 const UserPage: React.FC = () => {
-  const { userData, loading, firebaseUser } = useAuth();
+  const { userData, loading, firebaseUser, refreshUserData } = useAuth(); // Incluye refreshUserData
   const [editable, setEditable] = useState(false);
   const [userInfo, setUserInfo] = useState(userData);
   const [success, setSuccess] = useState<string | null>(null);
@@ -44,18 +44,21 @@ const UserPage: React.FC = () => {
       }
   
       await updateUserInfo(firebaseUser.uid, {
-        name: name, // Ahora sabemos que `name` es string
-        lastName: lastName,
-        company: company,
+        name,
+        lastName,
+        company,
       });
   
       if (email && email !== firebaseUser.email) {
-        await updateUserEmail(email); // Aquí email se garantiza que es string
-        setSuccess('Verification email sent to the new address. Please verify it.');
+        await updateUserEmail(email);
+        setSuccess('Verification email sent to the new address. Please verify it. You will be logged out upon verification.');
       } else {
         setSuccess('Information updated successfully.');
       }
-  
+
+      // Refrescar los datos del usuario en el contexto
+      await refreshUserData();
+
       setEditable(false);
     } catch (err: any) {
       setError(err.message || 'Error updating information.');
@@ -100,7 +103,7 @@ const UserPage: React.FC = () => {
             <input
               type="text"
               name="name"
-              value={userInfo.name}
+              value={userInfo.name || ""}
               onChange={handleInputChange}
               disabled={!editable}
             />
@@ -110,7 +113,7 @@ const UserPage: React.FC = () => {
             <input
               type="text"
               name="lastName"
-              value={userInfo.lastName}
+              value={userInfo.lastName || ""}
               onChange={handleInputChange}
               disabled={!editable}
             />
@@ -120,7 +123,7 @@ const UserPage: React.FC = () => {
             <input
               type="text"
               name="company"
-              value={userInfo.company}
+              value={userInfo.company || ""}
               onChange={handleInputChange}
               disabled={!editable}
             />

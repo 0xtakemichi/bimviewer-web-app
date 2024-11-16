@@ -11,6 +11,8 @@ interface User {
   name?: string;
   lastName?: string;
   company?: string;
+  jobTitle?: string; // Nuevo campo
+  country?: string;  // Nuevo campo
 }
 
 // Define la interfaz del contexto

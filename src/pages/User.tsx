@@ -5,6 +5,7 @@ import {
   updateUserEmail,
   sendEmailVerificationToUser,
 } from '../helpers/auth';
+import { jobTitles, countries } from '../data'; // Importamos las listas
 import '../styles/user.css';
 
 const UserPage: React.FC = () => {
@@ -20,7 +21,7 @@ const UserPage: React.FC = () => {
     }
   }, [userData]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     if (userInfo) {
       const { name, value } = e.target;
       setUserInfo({ ...userInfo, [name]: value });
@@ -29,29 +30,36 @@ const UserPage: React.FC = () => {
 
   const toggleEdit = () => {
     setEditable((prev) => !prev);
+    if (editable && userData) {
+      setUserInfo(userData); // Restablece los datos originales si se cancela la edición
+    }
     setSuccess(null);
     setError(null);
   };
 
   const saveChanges = async () => {
     if (!userInfo || !firebaseUser) return;
-  
+
     try {
-      const { name, lastName, company, email } = userInfo;
-  
-      if (!name || !lastName || !company) {
+      const { name, lastName, company, email, jobTitle, country } = userInfo;
+
+      if (!name || !lastName || !company || !jobTitle || !country) {
         throw new Error('All fields must be filled.');
       }
-  
+
       await updateUserInfo(firebaseUser.uid, {
         name,
         lastName,
         company,
+        jobTitle,
+        country,
       });
-  
+
       if (email && email !== firebaseUser.email) {
         await updateUserEmail(email);
-        setSuccess('Verification email sent to the new address. Please verify it. You will be logged out upon verification.');
+        setSuccess(
+          'Verification email sent to the new address. Please verify it. You will be logged out upon verification.'
+        );
       } else {
         setSuccess('Information updated successfully.');
       }
@@ -128,6 +136,38 @@ const UserPage: React.FC = () => {
               disabled={!editable}
             />
           </div>
+          <div>
+            <label>Job Title:</label>
+            <select
+              name="jobTitle"
+              value={userInfo.jobTitle || ""}
+              onChange={handleInputChange}
+              disabled={!editable}
+            >
+              <option value="">Select Job Title</option>
+              {jobTitles.map((title) => (
+                <option key={title} value={title}>
+                  {title}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label>Country:</label>
+            <select
+              name="country"
+              value={userInfo.country || ""}
+              onChange={handleInputChange}
+              disabled={!editable}
+            >
+              <option value="">Select Country</option>
+              {countries.map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="button-group">
             {!firebaseUser?.emailVerified && (
               <button onClick={verifyEmail} className="btn btn-warning">
@@ -139,9 +179,14 @@ const UserPage: React.FC = () => {
                 Edit
               </button>
             ) : (
-              <button onClick={saveChanges} className="btn btn-success">
-                Save Changes
-              </button>
+              <>
+                <button onClick={saveChanges} className="btn btn-success">
+                  Save Changes
+                </button>
+                <button onClick={toggleEdit} className="btn btn-secondary">
+                  Cancel
+                </button>
+              </>
             )}
           </div>
         </div>

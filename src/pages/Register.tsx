@@ -1,17 +1,18 @@
-// Register.tsx
 import React, { useState, useRef, FormEvent } from 'react';
 import { auth } from '../helpers/auth';
+import { jobTitles, countries } from '../data';
 import '../styles/auth.css';
 
 const Register: React.FC = () => {
   const [registerError, setRegisterError] = useState<string | null>(null);
 
-  // Definimos referencias
   const emailRef = useRef<HTMLInputElement>(null);
   const pwRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const lastNameRef = useRef<HTMLInputElement>(null);
   const companyRef = useRef<HTMLInputElement>(null);
+  const jobTitleRef = useRef<HTMLSelectElement>(null);
+  const countryRef = useRef<HTMLSelectElement>(null);
 
   const setErrorMsg = (message: string) => {
     setRegisterError(message);
@@ -25,10 +26,12 @@ const Register: React.FC = () => {
     const name = nameRef.current?.value;
     const lastName = lastNameRef.current?.value;
     const company = companyRef.current?.value;
+    const jobTitle = jobTitleRef.current?.value;
+    const country = countryRef.current?.value;
 
-    if (email && password && name && lastName && company) {
+    if (email && password && name && lastName && company && jobTitle && country) {
       try {
-        await auth(email, password, { name, lastName, company });
+        await auth(email, password, { name, lastName, company, jobTitle, country });
       } catch (error: any) {
         setErrorMsg(error.message || 'An error occurred during registration.');
       }
@@ -77,6 +80,28 @@ const Register: React.FC = () => {
             ref={companyRef}
             placeholder="Company"
           />
+        </div>
+        <div className="form-group">
+          <label>Job Title</label>
+          <select className="form-control" ref={jobTitleRef}>
+            <option value="">Select Job Title</option>
+            {jobTitles.map((title) => (
+              <option key={title} value={title}>
+                {title}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="form-group">
+          <label>Country</label>
+          <select className="form-control" ref={countryRef}>
+            <option value="">Select Country</option>
+            {countries.map((country) => (
+              <option key={country} value={country}>
+                {country}
+              </option>
+            ))}
+          </select>
         </div>
         {registerError && (
           <div className="alert" role="alert">

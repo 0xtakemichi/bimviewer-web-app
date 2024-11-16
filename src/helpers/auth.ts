@@ -22,13 +22,15 @@ interface User {
   name?: string;
   lastName?: string;
   company?: string;
+  jobTitle?: string;
+  country?: string;
 }
 
 // Función para registrar un nuevo usuario y enviar correo de verificación
 export async function auth(
   email: string, 
   pw: string, 
-  additionalData: { name: string; lastName: string; company: string }
+  additionalData: { name: string; lastName: string; company: string; jobTitle: string; country: string }
 ): Promise<UserCredential> {
   try {
     const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, pw);
@@ -38,7 +40,7 @@ export async function auth(
     await saveUser({
       uid: user.uid,
       email: user.email,
-      ...additionalData
+      ...additionalData,
     });
 
     // Envía el correo de verificación
@@ -53,7 +55,7 @@ export async function auth(
 }
 
 // Función para actualizar la información del usuario en Firestore
-export async function updateUserInfo(uid: string, data: { name: string; lastName: string; company: string }) {
+export async function updateUserInfo(uid: string, data: { name: string; lastName: string; company: string; jobTitle: string; country: string }) {
   try {
     const userDocRef = doc(firestoreDb, 'Users', uid);
     await updateDoc(userDocRef, data);
@@ -166,7 +168,9 @@ export async function saveUser(user: User): Promise<void> {
       email: user.email,
       name: user.name,
       lastName: user.lastName,
-      company: user.company
+      company: user.company,
+      jobTitle: user.jobTitle,
+      country: user.country,
     });
   } catch (error) {
     console.error('Error al guardar el usuario en Firestore:', error);

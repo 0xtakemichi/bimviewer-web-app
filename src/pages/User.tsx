@@ -137,7 +137,7 @@ const UserPage: React.FC = () => {
             />
           </div>
           <div>
-            <label>Job Title:</label>
+            <label>Job Title: </label>
             <select
               name="jobTitle"
               value={userInfo.jobTitle || ""}
@@ -153,7 +153,7 @@ const UserPage: React.FC = () => {
             </select>
           </div>
           <div>
-            <label>Country:</label>
+            <label>Country: </label>
             <select
               name="country"
               value={userInfo.country || ""}

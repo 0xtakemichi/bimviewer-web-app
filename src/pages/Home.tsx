@@ -65,22 +65,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Recorrido Virtual */}
-      <section className="virtual-tour-section">
-        <h2>Recorrido Virtual de Modelos BIM</h2>
-        <div className="video-container">
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/kvJUtU9aTyg?si=FJVYdpo2A7JuM4ni"
-            title="Recorrido Virtual"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
-        </div>
-      </section>
-
       {/* Información de Contacto */}
       <section className="contact-section">
         <h2>Contáctanos</h2>

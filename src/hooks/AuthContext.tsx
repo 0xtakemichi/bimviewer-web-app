@@ -67,7 +67,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Verificar si el correo no está verificado tras un cambio
         if (!user.emailVerified) {
           await signOut(firebaseAuth); // Cierra la sesión automáticamente
-          alert('Your session has ended. Please log in again with your new email.');
+          alert('Please verify your email address to access your account.');
         }
       } else {
         setUserData(null);

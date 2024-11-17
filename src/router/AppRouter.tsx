@@ -7,6 +7,7 @@ import Home from '../pages/Home';
 import Dashboard from '../pages/Dashboard';
 import UserPage from '../pages/User';
 import Viewer from "../pages/Viewer";
+import ProjectsPage from '../pages/Projects';
 import { logout } from '../helpers/auth';
 import { firebaseAuth } from '../firebase/index';
 import '../styles/navbar.css';
@@ -71,6 +72,11 @@ class AppRouter extends Component<{}, { authed: boolean; loading: boolean }> {
                 </Link>
               </li>
               <li>
+                <Link to="/projects" className="navbar-link">
+                  Projects
+                </Link>
+              </li>
+              <li>
                 <Link to="/viewer" className="navbar-link">
                   Viewer
                 </Link>
@@ -118,6 +124,7 @@ class AppRouter extends Component<{}, { authed: boolean; loading: boolean }> {
               <Route path="/dashboard" element={<PrivateRoute authed={this.state.authed} component={Dashboard} />} />
               <Route path="/viewer" element={<PrivateRoute authed={this.state.authed} component={Viewer} />} />
               <Route path="/user" element={<PrivateRoute authed={this.state.authed} component={UserPage} />} />
+              <Route path="/projects" element={<PrivateRoute authed={this.state.authed} component={ProjectsPage} />} />
               <Route path="*" element={<h3>No Match</h3>} />
             </Routes>
           </div>

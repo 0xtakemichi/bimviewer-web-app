@@ -35,7 +35,7 @@ export async function auth(
   try {
     const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, pw);
     const user = userCredential.user;
-
+    await sendEmailVerification(user);
     // Guardamos el usuario en la base de datos
     await saveUser({
       uid: user.uid,
@@ -43,11 +43,15 @@ export async function auth(
       ...additionalData,
     });
 
-    // Envía el correo de verificación
-    await sendEmailVerification(user);
-    console.log('Correo de verificación enviado');
+    try {
+      // Envía el correo de verificación
+      console.log('Correo de verificación enviado');
+    } catch (verificationError) {
+      console.error('Error al enviar el correo de verificación:', verificationError);
+      throw new Error('Verification email could not be sent. Please try again.');
+    }
 
-    return userCredential; // Retorna el UserCredential después de guardar y enviar el email
+    return userCredential; 
   } catch (error) {
     console.error('Error al crear el usuario:', error);
     throw error;
@@ -171,6 +175,8 @@ export async function saveUser(user: User): Promise<void> {
       company: user.company,
       jobTitle: user.jobTitle,
       country: user.country,
+      role: 'basic',
+      createdAt: new Date(),
     });
   } catch (error) {
     console.error('Error al guardar el usuario en Firestore:', error);

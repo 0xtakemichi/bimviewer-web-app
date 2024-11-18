@@ -1,6 +1,7 @@
 import { IProject, Project } from "./Project";
 import { firestoreDb } from "../firebase"; // Asegúrate de tener configurada tu instancia de Firestore
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, query, where, arrayUnion } from "firebase/firestore";
+import { trackProjectCreation } from "../helpers/analytics"
 
 export class ProjectsManager {
   list: Project[] = [];
@@ -52,6 +53,8 @@ export class ProjectsManager {
   
     // Guardar en Firestore con el mismo `id`
     await setDoc(doc(firestoreDb, 'Projects', projectId), { ...project });
+
+    trackProjectCreation(projectId, owner);
   
     console.log('New project created with ID:', projectId); // Depuración
     

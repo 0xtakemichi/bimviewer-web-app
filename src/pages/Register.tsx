@@ -1,6 +1,7 @@
 import React, { useState, useRef, FormEvent } from 'react';
 import { auth } from '../helpers/auth';
 import { jobTitles, countries } from '../data';
+import { trackUserSignUp } from '../helpers/analytics';
 import '../styles/auth.css';
 
 const Register: React.FC = () => {
@@ -31,7 +32,9 @@ const Register: React.FC = () => {
 
     if (email && password && name && lastName && company && jobTitle && country) {
       try {
-        await auth(email, password, { name, lastName, company, jobTitle, country });
+        const userCredential = await auth(email, password, { name, lastName, company, jobTitle, country });
+        // Registrar evento de registro en Analytics
+        trackUserSignUp(userCredential.user.uid);
       } catch (error: any) {
         setErrorMsg(error.message || 'An error occurred during registration.');
       }

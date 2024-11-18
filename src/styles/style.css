@@ -90,6 +90,7 @@ body {
 
 html {
   font-family: sans-serif;
+  background-color: azure;
 }
 
 bim-grid:not([floating]) > bim-panel {

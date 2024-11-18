@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ProjectsManager } from '../classes/ProjectsManager';
 import { Project } from '../classes/Project';
 import { useAuth } from '../hooks/AuthContext';
-import '../styles/projects.css'; // Asegúrate de tener este archivo CSS
+import '../styles/projects.css';
 
 const ProjectsPage: React.FC = () => {
   const { firebaseUser } = useAuth();

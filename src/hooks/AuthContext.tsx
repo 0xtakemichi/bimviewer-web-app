@@ -3,6 +3,7 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 import { firebaseAuth, firestoreDb } from '../firebase/index';
 import { onAuthStateChanged, User as FirebaseUser, signOut } from 'firebase/auth';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { trackUserLogin } from '../helpers/analytics';
 
 // Define la interfaz para los datos extendidos del usuario
 interface User {
@@ -65,6 +66,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setFirebaseUser(user);
       if (user) {
         await fetchUserData(user.uid);
+        // Registrar inicio de sesión en Analytics
+        trackUserLogin(user.uid);
 
         // Verificar si el correo no está verificado tras un cambio
         if (!user.emailVerified) {

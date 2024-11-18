@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ProjectsManager } from '../classes/ProjectsManager';
 import { Project } from '../classes/Project';
 import { useAuth } from '../hooks/AuthContext';
+import '../styles/projects.css'; // Asegúrate de tener este archivo CSS
 
 const ProjectsPage: React.FC = () => {
   const { firebaseUser } = useAuth();
@@ -11,10 +12,9 @@ const ProjectsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [searchValue, setSearchValue] = useState<string>('');
   const [collaboratorEmail, setCollaboratorEmail] = useState<string>('');
-  const [activeCollaboratorProject, setActiveCollaboratorProject] = useState<string | null>(null); // Nuevo estado para manejar el formulario de colaboradores
+  const [activeCollaboratorProject, setActiveCollaboratorProject] = useState<string | null>(null);
   const [selectedCollaboratorProject, setSelectedCollaboratorProject] = useState<string | null>(null);
   const [selectedCollaboratorUID, setSelectedCollaboratorUID] = useState<string | null>(null);
-  
 
   useEffect(() => {
     if (firebaseUser) {
@@ -41,7 +41,7 @@ const ProjectsPage: React.FC = () => {
 
     try {
       await projectsManager.newProject(newProjectData, firebaseUser.uid);
-      setProjects([...projectsManager.list]); 
+      setProjects([...projectsManager.list]);
     } catch (error) {
       console.error('Error creating project:', error);
     }
@@ -66,12 +66,12 @@ const ProjectsPage: React.FC = () => {
   const handleDeleteProject = async (id: string) => {
     if (!projectsManager) return;
 
-    const confirmDelete = window.confirm("Are you sure you want to delete this project?");
+    const confirmDelete = window.confirm('Are you sure you want to delete this project?');
     if (!confirmDelete) return;
 
     try {
       await projectsManager.deleteProject(id);
-      setProjects([...projectsManager.list]); 
+      setProjects([...projectsManager.list]);
     } catch (error) {
       console.error('Error deleting project:', error);
     }
@@ -79,23 +79,22 @@ const ProjectsPage: React.FC = () => {
 
   const handleAddCollaborator = async (projectId: string) => {
     if (!projectsManager) return;
-  
+
     try {
       await projectsManager.addCollaborator(projectId, collaboratorEmail);
       setProjects([...projectsManager.list]);
       alert('Collaborator added successfully!');
     } catch (error: any) {
-      alert(error.message); // Muestra el mensaje específico del error
+      alert(error.message);
     } finally {
-      setCollaboratorEmail(''); // Limpia el input
-      setActiveCollaboratorProject(null); // Cierra el formulario
+      setCollaboratorEmail('');
+      setActiveCollaboratorProject(null);
     }
   };
 
-
   const handleRemoveCollaborator = async (projectId: string) => {
     if (!projectsManager || !selectedCollaboratorUID) return;
-  
+
     try {
       await projectsManager.removeCollaborator(projectId, selectedCollaboratorUID);
       setProjects([...projectsManager.list]);
@@ -131,59 +130,65 @@ const ProjectsPage: React.FC = () => {
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
       />
-      <ul>
-        {projects.map((project) => (
-            <li key={project.id}>
-            <h3>{project.name}</h3>
-            <p>Role: {project.owner === firebaseUser?.uid ? "Owner" : "Collaborator"}</p>
-            <p>Status: {project.status}</p>
-            <p>Collaborators: {project.collaborators.join(', ') || 'None'}</p>
+      <div className="projects-grid">
+        {projects
+          .filter((project) =>
+            project.name.toLowerCase().includes(searchValue.toLowerCase())
+          )
+          .map((project) => (
+            <div key={project.id} className="project-card">
+              <h3>{project.name}</h3>
+              <p className={`status ${project.status.toLowerCase()}`}>{project.status}</p>
+              <p>Role: {project.owner === firebaseUser?.uid ? 'Owner' : 'Collaborator'}</p>
+              <p>Collaborators: {project.collaborators.join(', ') || 'None'}</p>
 
-            {project.owner === firebaseUser?.uid && (
+              {project.owner === firebaseUser?.uid && (
                 <>
-                <button onClick={() => setSelectedProject(project)}>Edit</button>
-                <button onClick={() => handleDeleteProject(project.id)}>Delete</button>
-                <button onClick={() => setActiveCollaboratorProject(project.id)}>Add Collaborator</button>
-                <button onClick={() => setSelectedCollaboratorProject(project.id)}>Remove Collaborator</button> {/* Nuevo botón */}
+                  <button onClick={() => setSelectedProject(project)}>Edit</button>
+                  <button onClick={() => handleDeleteProject(project.id)}>Delete</button>
+                  <button onClick={() => setActiveCollaboratorProject(project.id)}>Add Collaborator</button>
+                  <button onClick={() => setSelectedCollaboratorProject(project.id)}>
+                    Remove Collaborator
+                  </button>
                 </>
-            )}
+              )}
 
-            {activeCollaboratorProject === project.id && (
+              {activeCollaboratorProject === project.id && (
                 <div>
-                <input
+                  <input
                     type="email"
                     placeholder="Collaborator's email"
                     value={collaboratorEmail}
                     onChange={(e) => setCollaboratorEmail(e.target.value)}
-                />
-                <button onClick={() => handleAddCollaborator(project.id)}>Add</button>
-                <button onClick={() => { setActiveCollaboratorProject(null); setCollaboratorEmail(''); }}>Cancel</button>
+                  />
+                  <button onClick={() => handleAddCollaborator(project.id)}>Add</button>
+                  <button onClick={() => setActiveCollaboratorProject(null)}>Cancel</button>
                 </div>
-            )}
+              )}
 
-            {/* Mostrar formulario para eliminar colaborador */}
-            {selectedCollaboratorProject === project.id && (
+              {selectedCollaboratorProject === project.id && (
                 <div>
-                <h4>Remove Collaborator</h4>
-                <select
+                  <h4>Remove Collaborator</h4>
+                  <select
                     onChange={(e) => setSelectedCollaboratorUID(e.target.value)}
                     defaultValue=""
-                >
-                    <option value="" disabled>Select a collaborator</option>
-                    {project.collaborators.map(uid => (
-                    <option key={uid} value={uid}>
-                        {uid} {/* Puedes mapear el UID a un email si tienes esa información */}
+                  >
+                    <option value="" disabled>
+                      Select a collaborator
                     </option>
+                    {project.collaborators.map((uid) => (
+                      <option key={uid} value={uid}>
+                        {uid}
+                      </option>
                     ))}
-                </select>
-                <button onClick={() => handleRemoveCollaborator(project.id)}>Remove</button>
-                <button onClick={() => setSelectedCollaboratorProject(null)}>Cancel</button>
+                  </select>
+                  <button onClick={() => handleRemoveCollaborator(project.id)}>Remove</button>
+                  <button onClick={() => setSelectedCollaboratorProject(null)}>Cancel</button>
                 </div>
-            )}
-            </li>
-        ))}
-      </ul>
-      
+              )}
+            </div>
+          ))}
+      </div>
 
       {selectedProject && (
         <div>

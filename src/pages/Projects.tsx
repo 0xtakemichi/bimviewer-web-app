@@ -3,6 +3,7 @@ import { ProjectsManager } from '../classes/ProjectsManager';
 import { Project } from '../classes/Project';
 import { useAuth } from '../hooks/AuthContext';
 import '../styles/projects.css';
+import { trackPageView } from '../helpers/analytics';
 
 const ProjectsPage: React.FC = () => {
   const { firebaseUser } = useAuth();
@@ -18,6 +19,7 @@ const ProjectsPage: React.FC = () => {
 
   useEffect(() => {
     if (firebaseUser) {
+      trackPageView('Projects Page');
       const manager = new ProjectsManager(firebaseUser.uid);
       setProjectsManager(manager);
 

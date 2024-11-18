@@ -21,3 +21,10 @@ export const trackProjectCreation = (projectId: string, userId: string) => {
   console.log(`Event user_signup sent for user_id: ${projectId}`); // Verifica en la consola
 
 };
+
+export const trackPageView = (page: string) => {
+  logEvent(firebaseAnalytics, 'page_view', { 
+    page_title: page 
+  });
+  console.log(`Event page_view sent for page: ${page}`);
+};

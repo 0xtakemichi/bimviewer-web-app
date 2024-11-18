@@ -4,6 +4,7 @@ import {
   updateUserInfo,
   updateUserEmail,
   sendEmailVerificationToUser,
+  deleteUserAccount,
 } from '../helpers/auth';
 import { jobTitles, countries } from '../data'; // Importamos las listas
 import '../styles/user.css';
@@ -70,6 +71,30 @@ const UserPage: React.FC = () => {
       setEditable(false);
     } catch (err: any) {
       setError(err.message || 'Error updating information.');
+    }
+  };
+  const handleDeleteAccount = async () => {
+    const confirmAccountDeletion = window.confirm(
+      'Are you sure you want to delete your account? This action cannot be undone.'
+    );
+  
+    if (!confirmAccountDeletion) {
+      return; // Detener si el usuario cancela la primera confirmación
+    }
+  
+    const confirmProjectAndCollaborationDeletion = window.confirm(
+      'Deleting your account will also remove all your projects and collaborations. Do you wish to continue?'
+    );
+  
+    if (!confirmProjectAndCollaborationDeletion) {
+      return; // Detener si el usuario cancela la segunda confirmación
+    }
+  
+    try {
+      await deleteUserAccount();
+      alert('Your account and all associated data have been successfully deleted.');
+    } catch (err: any) {
+      setError(err.message || 'An error occurred while deleting the account.');
     }
   };
 
@@ -188,6 +213,9 @@ const UserPage: React.FC = () => {
                 </button>
               </>
             )}
+            <button onClick={handleDeleteAccount} className="btn btn-danger">
+              Delete Account
+            </button>
           </div>
         </div>
       )}

@@ -11,9 +11,10 @@ import {
   verifyBeforeUpdateEmail, 
   getAuth, 
   UserCredential,
-  ActionCodeSettings 
+  ActionCodeSettings,
+  deleteUser
 } from 'firebase/auth';
-import { doc, setDoc, updateDoc } from 'firebase/firestore';
+import { doc, setDoc, updateDoc, deleteDoc, collection, query, where, getDocs, arrayRemove } from 'firebase/firestore';
 
 // Definimos una interfaz para el usuario
 interface User {
@@ -180,6 +181,51 @@ export async function saveUser(user: User): Promise<void> {
     });
   } catch (error) {
     console.error('Error al guardar el usuario en Firestore:', error);
+    throw error;
+  }
+}
+
+export async function deleteUserAccount(): Promise<void> {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error('No hay un usuario autenticado actualmente.');
+  }
+
+  try {
+    const uid = user.uid;
+
+    // Eliminar todos los proyectos donde el usuario es owner
+    const projectsOwnedRef = collection(firestoreDb, 'Projects');
+    const ownedQuery = query(projectsOwnedRef, where('owner', '==', uid));
+    const ownedSnapshot = await getDocs(ownedQuery);
+
+    const deleteOwnedProjectsPromises = ownedSnapshot.docs.map((doc) => deleteDoc(doc.ref));
+    await Promise.all(deleteOwnedProjectsPromises);
+    console.log('Proyectos del usuario eliminados.');
+
+    // Eliminar al usuario de la lista de Collaborators en proyectos
+    const collaboratorsQuery = query(projectsOwnedRef, where('collaborators', 'array-contains', uid));
+    const collaboratorsSnapshot = await getDocs(collaboratorsQuery);
+
+    const removeFromCollaboratorsPromises = collaboratorsSnapshot.docs.map((doc) => 
+      updateDoc(doc.ref, {
+        collaborators: arrayRemove(uid),
+      })
+    );
+    await Promise.all(removeFromCollaboratorsPromises);
+    console.log('Usuario eliminado de la lista de Collaborators.');
+
+    // Eliminar el documento del usuario en Firestore
+    await deleteDoc(doc(firestoreDb, 'Users', uid));
+    console.log('Documento de Firestore eliminado.');
+
+    // Eliminar el usuario de Firebase Authentication
+    await deleteUser(user);
+    console.log('Usuario eliminado de Firebase Authentication.');
+  } catch (error) {
+    console.error('Error al eliminar la cuenta y los proyectos:', error);
     throw error;
   }
 }

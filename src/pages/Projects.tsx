@@ -124,14 +124,20 @@ const ProjectsPage: React.FC = () => {
 
   return (
     <div className={selectedProject ? 'blur-background' : ''}>
-      <h1>My Projects</h1>
-      <button onClick={handleCreateProject}>Create New Project</button>
-      <input
-        type="text"
-        placeholder="Search projects..."
-        value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value)}
-      />
+      <div className='bar-projects'>
+        <h1>My Projects</h1>
+        <div className='input-search'>
+          <input
+            type="text"
+            placeholder="Search projects..."
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+          />
+        </div>
+        <div className='new-project'>
+          <button onClick={handleCreateProject} className='btn-new-project'>Create New Project</button>
+        </div>
+      </div>
       <div className="projects-grid">
         {projects
           .filter((project) =>
@@ -147,6 +153,7 @@ const ProjectsPage: React.FC = () => {
               <p className={`status ${project.status.toLowerCase()}`}>{project.status}</p>
               <p>Role: {project.owner === firebaseUser?.uid ? 'Owner' : 'Collaborator'}</p>
               <p>Collaborators: {project.collaborators.join(', ') || 'None'}</p>
+              <p>{project.userRole}</p>
               {project.owner === firebaseUser?.uid && (
                 <>
                   <button onClick={() => setSelectedProject(project)} className='btn-edit-project'>Edit</button>

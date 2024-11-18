@@ -74,3 +74,32 @@
   border-radius: 15px;
   background-color: #DDBEA8;
 }
+.bar-projects{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+.bar-projects h1 {
+  margin: 0;
+}
+.input-search {
+  flex: 1; /* Permite que el input ocupe el espacio disponible */
+  display: flex;
+  justify-content: center; /* Centra el input horizontalmente dentro de su contenedor */
+  margin-left: 20px;
+}
+
+.input-search input {
+  width: 100%; /* Ajusta según lo necesario */
+  height: 21px;
+  max-width: 300px; /* Limita el ancho del input */
+}
+
+.new-project {
+  margin-left: 20px; /* Separación entre el input y el botón */
+}
+
+.btn-new-project {
+  padding: 8px 16px; /* Ajusta según sea necesario */
+}

@@ -12,9 +12,9 @@ const ProjectsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [searchValue, setSearchValue] = useState<string>('');
   const [collaboratorEmail, setCollaboratorEmail] = useState<string>('');
-  const [activeCollaboratorProject, setActiveCollaboratorProject] = useState<string | null>(null);
-  const [selectedCollaboratorProject, setSelectedCollaboratorProject] = useState<string | null>(null);
   const [selectedCollaboratorUID, setSelectedCollaboratorUID] = useState<string | null>(null);
+  const [showAddCollaborator, setShowAddCollaborator] = useState(false);
+  const [showRemoveCollaborator, setShowRemoveCollaborator] = useState(false);
 
   useEffect(() => {
     if (firebaseUser) {
@@ -37,6 +37,7 @@ const ProjectsPage: React.FC = () => {
       status: 'Pending' as const,
       userRole: 'Architect' as const,
       finishDate: new Date(),
+      createdAt: new Date(),
     };
 
     try {
@@ -63,47 +64,48 @@ const ProjectsPage: React.FC = () => {
     }
   };
 
-  const handleDeleteProject = async (id: string) => {
-    if (!projectsManager) return;
+  const handleDeleteProject = async () => {
+    if (!projectsManager || !selectedProject) return;
 
     const confirmDelete = window.confirm('Are you sure you want to delete this project?');
     if (!confirmDelete) return;
 
     try {
-      await projectsManager.deleteProject(id);
+      await projectsManager.deleteProject(selectedProject.id);
       setProjects([...projectsManager.list]);
+      setSelectedProject(null);
     } catch (error) {
       console.error('Error deleting project:', error);
     }
   };
 
-  const handleAddCollaborator = async (projectId: string) => {
-    if (!projectsManager) return;
+  const handleAddCollaborator = async () => {
+    if (!projectsManager || !selectedProject) return;
 
     try {
-      await projectsManager.addCollaborator(projectId, collaboratorEmail);
+      await projectsManager.addCollaborator(selectedProject.id, collaboratorEmail);
       setProjects([...projectsManager.list]);
       alert('Collaborator added successfully!');
     } catch (error: any) {
       alert(error.message);
     } finally {
       setCollaboratorEmail('');
-      setActiveCollaboratorProject(null);
+      setShowAddCollaborator(false);
     }
   };
 
-  const handleRemoveCollaborator = async (projectId: string) => {
-    if (!projectsManager || !selectedCollaboratorUID) return;
+  const handleRemoveCollaborator = async () => {
+    if (!projectsManager || !selectedProject || !selectedCollaboratorUID) return;
 
     try {
-      await projectsManager.removeCollaborator(projectId, selectedCollaboratorUID);
+      await projectsManager.removeCollaborator(selectedProject.id, selectedCollaboratorUID);
       setProjects([...projectsManager.list]);
       alert('Collaborator removed successfully!');
     } catch (error: any) {
       alert(error.message);
     } finally {
       setSelectedCollaboratorUID(null);
-      setSelectedCollaboratorProject(null);
+      setShowRemoveCollaborator(false);
     }
   };
 
@@ -121,7 +123,7 @@ const ProjectsPage: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className={selectedProject ? 'blur-background' : ''}>
       <h1>My Projects</h1>
       <button onClick={handleCreateProject}>Create New Project</button>
       <input
@@ -137,84 +139,93 @@ const ProjectsPage: React.FC = () => {
           )
           .map((project) => (
             <div key={project.id} className="project-card">
-              <h3>{project.name}</h3>
+              <div className='card-title'>
+                <h3>{project.name}</h3>
+              </div>
+              <hr />
+              <p>{project.description}</p>
               <p className={`status ${project.status.toLowerCase()}`}>{project.status}</p>
               <p>Role: {project.owner === firebaseUser?.uid ? 'Owner' : 'Collaborator'}</p>
               <p>Collaborators: {project.collaborators.join(', ') || 'None'}</p>
-
               {project.owner === firebaseUser?.uid && (
                 <>
-                  <button onClick={() => setSelectedProject(project)}>Edit</button>
-                  <button onClick={() => handleDeleteProject(project.id)}>Delete</button>
-                  <button onClick={() => setActiveCollaboratorProject(project.id)}>Add Collaborator</button>
-                  <button onClick={() => setSelectedCollaboratorProject(project.id)}>
-                    Remove Collaborator
-                  </button>
+                  <button onClick={() => setSelectedProject(project)} className='btn-edit-project'>Edit</button>
                 </>
-              )}
-
-              {activeCollaboratorProject === project.id && (
-                <div>
-                  <input
-                    type="email"
-                    placeholder="Collaborator's email"
-                    value={collaboratorEmail}
-                    onChange={(e) => setCollaboratorEmail(e.target.value)}
-                  />
-                  <button onClick={() => handleAddCollaborator(project.id)}>Add</button>
-                  <button onClick={() => setActiveCollaboratorProject(null)}>Cancel</button>
-                </div>
-              )}
-
-              {selectedCollaboratorProject === project.id && (
-                <div>
-                  <h4>Remove Collaborator</h4>
-                  <select
-                    onChange={(e) => setSelectedCollaboratorUID(e.target.value)}
-                    defaultValue=""
-                  >
-                    <option value="" disabled>
-                      Select a collaborator
-                    </option>
-                    {project.collaborators.map((uid) => (
-                      <option key={uid} value={uid}>
-                        {uid}
-                      </option>
-                    ))}
-                  </select>
-                  <button onClick={() => handleRemoveCollaborator(project.id)}>Remove</button>
-                  <button onClick={() => setSelectedCollaboratorProject(null)}>Cancel</button>
-                </div>
               )}
             </div>
           ))}
       </div>
 
       {selectedProject && (
-        <div>
-          <h2>Edit Project</h2>
-          <input
-            type="text"
-            name="name"
-            value={selectedProject.name}
-            onChange={handleInputChange}
-          />
-          <textarea
-            name="description"
-            value={selectedProject.description}
-            onChange={handleInputChange}
-          />
-          <select
-            name="status"
-            value={selectedProject.status}
-            onChange={handleInputChange}
-          >
-            <option value="Pending">Pending</option>
-            <option value="Active">Active</option>
-            <option value="Finished">Finished</option>
-          </select>
-          <button onClick={handleEditProject}>Save Changes</button>
-          <button onClick={() => setSelectedProject(null)}>Cancel</button>
+        <div className="modal-overlay" onClick={() => setSelectedProject(null)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <h2>Edit Project</h2>
+            <input
+              type="text"
+              name="name"
+              value={selectedProject.name}
+              onChange={handleInputChange}
+            />
+            <textarea
+              name="description"
+              value={selectedProject.description}
+              onChange={handleInputChange}
+            />
+            <select
+              name="status"
+              value={selectedProject.status}
+              onChange={handleInputChange}
+            >
+              <option value="Pending">Pending</option>
+              <option value="Active">Active</option>
+              <option value="Finished">Finished</option>
+            </select>
+            {/* <button onClick={handleEditProject}>Save Changes</button> */}
+            {/* <button onClick={handleDeleteProject}>Delete Project</button> */}
+
+            <button onClick={() => setShowAddCollaborator((prev) => !prev)}>
+              {showAddCollaborator ? 'Cancel Add Collaborator' : 'Add Collaborator'}
+            </button>
+            {showAddCollaborator && (
+              <div>
+                <input
+                  type="email"
+                  placeholder="Collaborator's email"
+                  value={collaboratorEmail}
+                  onChange={(e) => setCollaboratorEmail(e.target.value)}
+                />
+                <button onClick={handleAddCollaborator}>Add</button>
+              </div>
+            )}
+
+            <button onClick={() => setShowRemoveCollaborator((prev) => !prev)}>
+              {showRemoveCollaborator ? 'Cancel Remove Collaborator' : 'Remove Collaborator'}
+            </button>
+            {showRemoveCollaborator && (
+              <div>
+                <select
+                  onChange={(e) => setSelectedCollaboratorUID(e.target.value)}
+                  defaultValue=""
+                >
+                  <option value="" disabled>
+                    Select a collaborator
+                  </option>
+                  {selectedProject.collaborators.map((uid) => (
+                    <option key={uid} value={uid}>
+                      {uid}
+                    </option>
+                  ))}
+                </select>
+                <button onClick={handleRemoveCollaborator}>Remove</button>
+              </div>
+            )}
+            <br />
+            <br />
+            <button onClick={handleEditProject} className="btn btn-success">Save Changes</button>
+            <button onClick={() => setSelectedProject(null)} className="btn btn-secondary">Cancel</button>
+            <button onClick={handleDeleteProject} className="btn btn-danger">Delete Project</button>
+
+          </div>
         </div>
       )}
     </div>

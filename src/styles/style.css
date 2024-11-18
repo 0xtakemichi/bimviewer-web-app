@@ -67,8 +67,21 @@ html.bim-ui-light {
 
 * {
   margin: 0;
+  font-family: 'Inter', sans-serif;
 }
 
+button{
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 20px;
+  border: none;
+  /* display: flex; */
+  align-items: center;
+  column-gap: 5px;
+}
+button:hover{
+  background-color: #8c9cb7;
+}
 body {
   display: grid;
   height: 100vh;

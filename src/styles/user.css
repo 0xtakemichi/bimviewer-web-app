@@ -64,6 +64,11 @@
 .btn-primary:hover {
   background-color: darken(#007bff, 10%);
 }
+.btn-secondary{
+  border: none;
+  color: #fff;
+  background-color: #343A40;
+}
 
 .btn-warning {
   background-color: #ffc107;
@@ -85,4 +90,9 @@
 
 .btn-success:hover {
   background-color: darken(#28a745, 10%);
+}
+.btn-danger{
+  background-color: #BC4749;
+  color: #fff;
+  border: none;
 }

@@ -10,6 +10,7 @@ export interface IProject {
   owner: string; // UID del usuario que creó el proyecto
   collaborators: string[]; // UIDs de otros usuarios en el proyecto
   createdAt: Date;
+  activityLogs: string[];
 }
 
 export class Project implements IProject {
@@ -22,6 +23,7 @@ export class Project implements IProject {
   collaborators!: string[];
   createdAt: Date;
   id: string;
+  activityLogs!: string[];
 
   constructor(data: IProject, id: string) {
     this.name = data.name;
@@ -33,5 +35,6 @@ export class Project implements IProject {
     this.collaborators = data.collaborators || [];
     this.createdAt = data.createdAt;
     this.id = id;
+    this.activityLogs = data.activityLogs || [];
   }
 }

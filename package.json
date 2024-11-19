@@ -12,10 +12,12 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/jspdf": "^2.0.0",
     "@types/react": "18.2.31",
     "@types/react-dom": "18.2.14",
     "@types/three": "0.163.0",
     "@types/uuid": "^10.0.0",
+    "@types/xlsx": "^0.0.36",
     "@typescript-eslint/eslint-plugin": "7.2.0",
     "@typescript-eslint/parser": "7.2.0",
     "@vitejs/plugin-react": "4.2.0",
@@ -35,6 +37,7 @@
     "@thatopen/ui-obc": "~2.2.0",
     "bootstrap": "^5.3.3",
     "firebase": "10.5.2",
+    "jspdf": "^2.5.2",
     "jszip": "3.10.1",
     "react": "18.2.0",
     "react-bootstrap": "^2.10.5",
@@ -42,6 +45,7 @@
     "react-router-dom": "6.18.0",
     "three": "0.160.1",
     "uuid": "^9.0.1",
-    "web-ifc": "0.0.57"
+    "web-ifc": "0.0.57",
+    "xlsx": "^0.18.5"
   }
 }

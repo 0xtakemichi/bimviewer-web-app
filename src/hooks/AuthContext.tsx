@@ -50,14 +50,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (userDoc.exists()) {
       const userData = userDoc.data() as User;
       const currentEmail = firebaseAuth.currentUser?.email;
-
+      setUserData({ ...userData, uid }); // Asegúrate de incluir el UID
       // Sincronizar el correo electrónico si es diferente
       if (userData.email !== currentEmail && currentEmail !== undefined) {
         await updateDoc(userDocRef, { email: currentEmail });
         userData.email = currentEmail; // Actualiza el valor local
       }
-
-      setUserData(userData);
     }
   };
 

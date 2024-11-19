@@ -47,9 +47,9 @@ export class ProjectsManager {
     this.list = allProjects;
   }
 
-  async newProject(data: Omit<IProject, 'owner' | 'collaborators'>, owner: string, id?: string) {
+  async newProject(data: Omit<IProject, 'owner' | 'collaborators' | 'activityLogs' >, owner: string, id?: string) {
     const projectId = id || doc(collection(firestoreDb, "Projects")).id;
-    const project = new Project({ ...data, owner, collaborators: [] }, projectId);
+    const project = new Project({ ...data, owner, collaborators: [], activityLogs: []}, projectId);
   
     // Guardar en Firestore con el mismo `id`
     await setDoc(doc(firestoreDb, 'Projects', projectId), { ...project });

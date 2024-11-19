@@ -1,85 +1,156 @@
-import '../styles/home.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Carousel, Card, Button, Container, Row, Col, Alert } from 'react-bootstrap';
+import { useState } from 'react';
 
 const Home = () => {
+  const [showAlert, setShowAlert] = useState(true);
+
   return (
-    <div className="home-container">
-      {/* Sección de Bienvenida */}
-      <section className="welcome-section">
-        <h1>IngeBIM</h1>
-        <p>Soluciones en transformación digital para la industria de la ingeniería y construcción.</p>
-      </section>
+    <div className="home-container bg-light">
+      <Container className="py-5">
+        {/* Alerta de Novedades */}
+        {showAlert && (
+          <Alert variant="info" onClose={() => setShowAlert(false)} dismissible>
+            ¡Nueva funcionalidad! Explora nuestro visor web de modelos BIM ahora en tu navegador.
+          </Alert>
+        )}
 
-      {/* Servicios */}
-      <section className="services-section">
-        <h2>Servicios</h2>
-        <div className="services-list">
-          <div className="service-item">
-            <h3>Modelación</h3>
-            <ul>
-              <li>Estructuras</li>
-              <li>Vialidad</li>
-              <li>Luminarias</li>
-              <li>Seguridad vial</li>
-              <li>Defensas fluviales</li>
-              <li>Paisajismo</li>
-              <li>Aguas servidas</li>
-              <li>Agua potable</li>
-              <li>Entre otros</li>
-            </ul>
-          </div>
-          <div className="service-item">
-            <h3>Animación 3D</h3>
-            <ul>
-              <li>Video animación</li>
-              <li>Proyectos de infraestructura</li>
-              <li>Entre otros</li>
-            </ul>
-          </div>
-          <div className="service-item">
-            <h3>Recorridos Virtuales</h3>
-            <ul>
-              <li>Visualización en primera persona</li>
-              <li>Variedad de avatares</li>
-              <li>Simulación de conducción</li>
-              <li>Recorrido virtual</li>
-              <li>Entre otros</li>
-            </ul>
-          </div>
-          <div className="service-item">
-            <h3>Coordinación</h3>
-            <ul>
-              <li>Coordinación BIM (BIM manager-coordinador BIM)</li>
-              <li>Revisores BIM</li>
-              <li>Interoperabilidad</li>
-              <li>Información de modelos (LOD 100, LOD 200, LOD 300 y LOD 400)</li>
-            </ul>
-          </div>
-          <div className="service-item">
-            <h3>Interferencias</h3>
-            <ul>
-              <li>Detección de interferencias en modelos</li>
-              <li>Revisión de modelos</li>
-              <li>Detección de inconsistencias geométricas</li>
-            </ul>
-          </div>
-        </div>
-      </section>
+        {/* Sección de Bienvenida */}
+        <section className="welcome-section text-center mb-5">
+          <img
+            src="/logo.png" // Ruta al logo en la carpeta public
+            alt="IngeBIM Logo"
+            className="mb-4" // Margen inferior para separar del texto
+            style={{ height: '200px' }} // Ajusta el tamaño según necesites
+          />
+          <h1 className="display-4 fw-bold">IngeBIM</h1>
+          <p className="lead">
+            Soluciones en transformación digital para la industria de la ingeniería y construcción.
+          </p>
+          <Button variant="primary" size="lg" href="#services">
+            Conoce Nuestros Servicios
+          </Button>
+        </section>
 
-      {/* Información de Contacto */}
-      <section className="contact-section">
-        <h2>Contáctanos</h2>
-        <p>Teléfonos:</p>
-        <ul>
-          <li><a href="tel:+56984230810">+56984230810</a></li>
-          <li><a href="tel:+56992525535">+56992525535</a></li>
-        </ul>
-        <p>Email: <a href="mailto:contacto@ingenieriabim.cl">contacto@ingenieriabim.cl</a></p>
-        <p>Ubicación: Santiago de Chile</p>
-        <div className="social-media">
-          <a href="https://wa.me" target="_blank" rel="noopener noreferrer">Linkedin</a>
-          <a href="https://wa.me" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-        </div>
-      </section>
+        {/* Carrusel Interactivo */}
+        <Carousel className="mb-5">
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="https://via.placeholder.com/800x400"
+              alt="Primer Slide"
+            />
+            <Carousel.Caption>
+              <h3>Modelación BIM</h3>
+              <p>Transforma tus proyectos con precisión y eficiencia.</p>
+            </Carousel.Caption>
+          </Carousel.Item>
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="https://via.placeholder.com/800x400"
+              alt="Segundo Slide"
+            />
+            <Carousel.Caption>
+              <h3>Animación 3D</h3>
+              <p>Presenta tus proyectos de una manera visualmente impactante.</p>
+            </Carousel.Caption>
+          </Carousel.Item>
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="https://via.placeholder.com/800x400"
+              alt="Tercer Slide"
+            />
+            <Carousel.Caption>
+              <h3>Recorridos Virtuales</h3>
+              <p>Explora tus proyectos en un entorno inmersivo.</p>
+            </Carousel.Caption>
+          </Carousel.Item>
+        </Carousel>
+
+        {/* Servicios */}
+        <section id="services" className="services-section mb-5">
+          <h2 className="text-center mb-4">Nuestros Servicios</h2>
+          <Row xs={1} md={2} lg={3} className="g-4">
+            <Col>
+              <Card>
+                <Card.Body>
+                  <Card.Title>Modelación</Card.Title>
+                  <Card.Text>
+                    Desde estructuras hasta aguas servidas, nuestro equipo te ofrece soluciones personalizadas.
+                  </Card.Text>
+                  <Button variant="outline-primary">Saber Más</Button>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col>
+              <Card>
+                <Card.Body>
+                  <Card.Title>Animación 3D</Card.Title>
+                  <Card.Text>
+                    Muestra tus proyectos de infraestructura con impacto visual y claridad.
+                  </Card.Text>
+                  <Button variant="outline-primary">Ver Ejemplos</Button>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col>
+              <Card>
+                <Card.Body>
+                  <Card.Title>Recorridos Virtuales</Card.Title>
+                  <Card.Text>
+                    Vive tus proyectos en primera persona con tecnología avanzada.
+                  </Card.Text>
+                  <Button variant="outline-primary">Experimentar</Button>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col>
+              <Card>
+                <Card.Body>
+                  <Card.Title>Coordinación</Card.Title>
+                  <Card.Text>
+                    Gestión y coordinación BIM para proyectos de alta complejidad.
+                  </Card.Text>
+                  <Button variant="outline-primary">Descubre Más</Button>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col>
+              <Card>
+                <Card.Body>
+                  <Card.Title>Interferencias</Card.Title>
+                  <Card.Text>
+                    Detección precisa de interferencias para evitar problemas en la ejecución.
+                  </Card.Text>
+                  <Button variant="outline-primary">Más Información</Button>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </section>
+
+        {/* Información de Contacto */}
+        <section className="contact-section text-center">
+          <h2 className="mb-4">Contáctanos</h2>
+          <p>Teléfonos:</p>
+          <ul className="list-unstyled">
+            <li><a href="tel:+56984230810">+56984230810</a></li>
+            <li><a href="tel:+56992525535">+56992525535</a></li>
+          </ul>
+          <p>Email: <a href="mailto:contacto@ingenieriabim.cl">contacto@ingenieriabim.cl</a></p>
+          <p>Ubicación: Santiago de Chile</p>
+          <div className="social-media">
+            <Button variant="outline-info" href="https://www.linkedin.com" target="_blank">
+              LinkedIn
+            </Button>{' '}
+            <Button variant="outline-success" href="https://wa.me" target="_blank">
+              WhatsApp
+            </Button>
+          </div>
+        </section>
+      </Container>
     </div>
   );
 };

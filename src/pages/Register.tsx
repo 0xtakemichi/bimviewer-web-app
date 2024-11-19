@@ -2,7 +2,8 @@ import React, { useState, useRef, FormEvent } from 'react';
 import { auth } from '../helpers/auth';
 import { jobTitles, countries } from '../data';
 import { trackUserSignUp } from '../helpers/analytics';
-import '../styles/auth.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container, Form, Button, Card, Alert } from 'react-bootstrap';
 
 const Register: React.FC = () => {
   const [registerError, setRegisterError] = useState<string | null>(null);
@@ -33,7 +34,6 @@ const Register: React.FC = () => {
     if (email && password && name && lastName && company && jobTitle && country) {
       try {
         const userCredential = await auth(email, password, { name, lastName, company, jobTitle, country });
-        // Registrar evento de registro en Analytics
         trackUserSignUp(userCredential.user.uid);
       } catch (error: any) {
         setErrorMsg(error.message || 'An error occurred during registration.');
@@ -44,78 +44,59 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="login-container">
-      <h1 className="login-title">Sign Up</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Email</label>
-          <input className="form-control" ref={emailRef} placeholder="Email" />
-        </div>
-        <div className="form-group">
-          <label>Password</label>
-          <input
-            type="password"
-            className="form-control"
-            placeholder="Password"
-            ref={pwRef}
-          />
-        </div>
-        <div className="form-group">
-          <label>First Name</label>
-          <input
-            className="form-control"
-            ref={nameRef}
-            placeholder="First Name"
-          />
-        </div>
-        <div className="form-group">
-          <label>Last Name</label>
-          <input
-            className="form-control"
-            ref={lastNameRef}
-            placeholder="Last Name"
-          />
-        </div>
-        <div className="form-group">
-          <label>Company</label>
-          <input
-            className="form-control"
-            ref={companyRef}
-            placeholder="Company"
-          />
-        </div>
-        <div className="form-group">
-          <label>Job Title</label>
-          <select className="form-control" ref={jobTitleRef}>
-            <option value="">Select Job Title</option>
-            {jobTitles.map((title) => (
-              <option key={title} value={title}>
-                {title}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="form-group">
-          <label>Country</label>
-          <select className="form-control" ref={countryRef}>
-            <option value="">Select Country</option>
-            {countries.map((country) => (
-              <option key={country} value={country}>
-                {country}
-              </option>
-            ))}
-          </select>
-        </div>
-        {registerError && (
-          <div className="alert" role="alert">
-            {registerError}
-          </div>
-        )}
-        <button type="submit" className="register-btn">
-          Sign Up
-        </button>
-      </form>
-    </div>
+    <Container fluid className="d-flex justify-content-center align-items-center vh-100 bg-light">
+      <Card className="p-4 shadow-lg" style={{ maxWidth: '500px', width: '100%' }}>
+        <h2 className="text-center mb-4">Sign Up</h2>
+        {registerError && <Alert variant="danger">{registerError}</Alert>}
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3" controlId="formEmail">
+            <Form.Label>Email</Form.Label>
+            <Form.Control type="email" placeholder="Enter email" ref={emailRef} />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control type="password" placeholder="Password" ref={pwRef} />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formFirstName">
+            <Form.Label>First Name</Form.Label>
+            <Form.Control type="text" placeholder="First Name" ref={nameRef} />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formLastName">
+            <Form.Label>Last Name</Form.Label>
+            <Form.Control type="text" placeholder="Last Name" ref={lastNameRef} />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formCompany">
+            <Form.Label>Company</Form.Label>
+            <Form.Control type="text" placeholder="Company" ref={companyRef} />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formJobTitle">
+            <Form.Label>Job Title</Form.Label>
+            <Form.Select ref={jobTitleRef}>
+              <option value="">Select Job Title</option>
+              {jobTitles.map((title) => (
+                <option key={title} value={title}>
+                  {title}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formCountry">
+            <Form.Label>Country</Form.Label>
+            <Form.Select ref={countryRef}>
+              <option value="">Select Country</option>
+              {countries.map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+          <Button variant="primary" type="submit" className="w-100">
+            Sign Up
+          </Button>
+        </Form>
+      </Card>
+    </Container>
   );
 };
 

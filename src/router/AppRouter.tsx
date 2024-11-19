@@ -6,11 +6,12 @@ import Register from '../pages/Register';
 import Home from '../pages/Home';
 import Dashboard from '../pages/Dashboard';
 import UserPage from '../pages/User';
-import Viewer from "../pages/Viewer";
+import Viewer from '../pages/Viewer';
 import ProjectsPage from '../pages/Projects';
 import { logout } from '../helpers/auth';
 import { firebaseAuth } from '../firebase/index';
-import '../styles/navbar.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 
 interface RouteProps {
   component: React.ComponentType<any>;
@@ -56,67 +57,65 @@ class AppRouter extends Component<{}, { authed: boolean; loading: boolean }> {
     ) : (
       <BrowserRouter>
         <div>
-          <nav className="navbar">
-            <Link to="/" className="navbar-brand">
-              IngeBIM Viewer
-            </Link>
-            <ul className="navbar-nav">
-              <li>
-                <Link to="/" className="navbar-link">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link to="/dashboard" className="navbar-link">
-                  Dashboard
-                </Link>
-              </li>
-              <li>
-                <Link to="/projects" className="navbar-link">
-                  Projects
-                </Link>
-              </li>
-              <li>
-                <Link to="/viewer" className="navbar-link">
-                  Viewer
-                </Link>
-              </li>
-              {this.state.authed ? (
-                <>
-                  <li>
-                  <Link to="/user" className="navbar-link">
-                    Profile
-                  </Link>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => {
-                        logout();
-                        this.setState({ authed: false });
-                      }}
-                      className="navbar-btn"
-                    >
-                      Log Out
-                    </button>
-                  </li>
-                </>
-              ) : (
-                <>
-                  <li>
-                    <Link to="/login" className="navbar-link">
-                      LOG IN
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/register" className="navbar-link">
-                      SIGN UP
-                    </Link>
-                  </li>
-                </>
-              )}
-            </ul>
-          </nav>
-          <div className="container">
+          <Navbar bg="dark" variant="dark" expand="lg">
+            <Container>
+              <Navbar.Brand as={Link} to="/">
+                <img
+                  src="/IngeBIM.png"
+                  alt="IngeBIM"
+                  height="30"
+                  className="d-inline-block align-top"
+                />
+              </Navbar.Brand>
+              <Navbar.Toggle aria-controls="basic-navbar-nav" />
+              <Navbar.Collapse id="basic-navbar-nav">
+                <Nav className="me-auto">
+                  <Nav.Link as={Link} to="/">
+                    Home
+                  </Nav.Link>
+                  <Nav.Link as={Link} to="/dashboard">
+                    Dashboard
+                  </Nav.Link>
+                  <Nav.Link as={Link} to="/projects">
+                    Projects
+                  </Nav.Link>
+                  <Nav.Link as={Link} to="/viewer">
+                    Viewer
+                  </Nav.Link>
+                </Nav>
+                <Nav>
+                  {this.state.authed ? (
+                    <>
+                      <Nav.Link as={Link} to="/user">
+                        Profile
+                      </Nav.Link>
+                      <Button
+                        variant="outline-light"
+                        onClick={() => {
+                          logout();
+                          this.setState({ authed: false });
+                        }}
+                        className="ms-2"
+                      >
+                        Log Out
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Nav.Link as={Link} to="/login">
+                        LOG IN
+                      </Nav.Link>
+                      
+                      <Nav.Link as={Link} to="/register">
+                        SIGN UP
+                      </Nav.Link>
+                    </>
+                  )}
+                </Nav>
+              </Navbar.Collapse>
+            </Container>
+          </Navbar>
+          <Container fluid className="p-0">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<PublicRoute authed={this.state.authed} component={Login} />} />
@@ -125,9 +124,9 @@ class AppRouter extends Component<{}, { authed: boolean; loading: boolean }> {
               <Route path="/viewer" element={<PrivateRoute authed={this.state.authed} component={Viewer} />} />
               <Route path="/user" element={<PrivateRoute authed={this.state.authed} component={UserPage} />} />
               <Route path="/projects" element={<PrivateRoute authed={this.state.authed} component={ProjectsPage} />} />
-              <Route path="*" element={<h3>No Match</h3>} />
+              <Route path="*" element={<h3>No Match</h3>} />r
             </Routes>
-          </div>
+          </Container>
         </div>
       </BrowserRouter>
     );

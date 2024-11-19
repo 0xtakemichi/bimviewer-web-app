@@ -6,11 +6,11 @@ import {
   sendEmailVerificationToUser,
   deleteUserAccount,
 } from '../helpers/auth';
-import { jobTitles, countries } from '../data'; // Importamos las listas
-import '../styles/user.css';
+import { jobTitles, countries } from '../data';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const UserPage: React.FC = () => {
-  const { userData, loading, firebaseUser, refreshUserData } = useAuth(); // Incluye refreshUserData
+  const { userData, loading, firebaseUser, refreshUserData } = useAuth();
   const [editable, setEditable] = useState(false);
   const [userInfo, setUserInfo] = useState(userData);
   const [success, setSuccess] = useState<string | null>(null);
@@ -32,7 +32,7 @@ const UserPage: React.FC = () => {
   const toggleEdit = () => {
     setEditable((prev) => !prev);
     if (editable && userData) {
-      setUserInfo(userData); // Restablece los datos originales si se cancela la edición
+      setUserInfo(userData);
     }
     setSuccess(null);
     setError(null);
@@ -45,7 +45,7 @@ const UserPage: React.FC = () => {
       const { name, lastName, company, email, jobTitle, country } = userInfo;
 
       if (!name || !lastName || !company || !jobTitle || !country) {
-        throw new Error('All fields must be filled.');
+        throw new Error('Todos los campos deben ser completados.');
       }
 
       await updateUserInfo(firebaseUser.uid, {
@@ -59,163 +59,169 @@ const UserPage: React.FC = () => {
       if (email && email !== firebaseUser.email) {
         await updateUserEmail(email);
         setSuccess(
-          'Verification email sent to the new address. Please verify it. You will be logged out upon verification.'
+          'Correo de verificación enviado a la nueva dirección. Por favor, verifícalo. Se cerrará la sesión al verificar.'
         );
       } else {
-        setSuccess('Information updated successfully.');
+        setSuccess('Información actualizada exitosamente.');
       }
 
-      // Refrescar los datos del usuario en el contexto
       await refreshUserData();
-
       setEditable(false);
     } catch (err: any) {
-      setError(err.message || 'Error updating information.');
+      setError(err.message || 'Error al actualizar la información.');
     }
   };
+
   const handleDeleteAccount = async () => {
     const confirmAccountDeletion = window.confirm(
-      'Are you sure you want to delete your account? This action cannot be undone.'
+      '¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.'
     );
-  
+
     if (!confirmAccountDeletion) {
-      return; // Detener si el usuario cancela la primera confirmación
+      return;
     }
-  
+
     const confirmProjectAndCollaborationDeletion = window.confirm(
-      'Deleting your account will also remove all your projects and collaborations. Do you wish to continue?'
+      'Eliminar tu cuenta también eliminará todos tus proyectos y colaboraciones. ¿Deseas continuar?'
     );
-  
+
     if (!confirmProjectAndCollaborationDeletion) {
-      return; // Detener si el usuario cancela la segunda confirmación
+      return;
     }
-  
+
     try {
       await deleteUserAccount();
-      alert('Your account and all associated data have been successfully deleted.');
+      alert('Tu cuenta y todos los datos asociados han sido eliminados exitosamente.');
     } catch (err: any) {
-      setError(err.message || 'An error occurred while deleting the account.');
+      setError(err.message || 'Ocurrió un error al eliminar la cuenta.');
     }
   };
 
   const verifyEmail = async () => {
     try {
       await sendEmailVerificationToUser();
-      setSuccess('Verification email sent. Please check your inbox.');
+      setSuccess('Correo de verificación enviado. Por favor, revisa tu bandeja de entrada.');
     } catch (err: any) {
-      setError(err.message || 'Error sending verification email.');
+      setError(err.message || 'Error al enviar el correo de verificación.');
     }
   };
 
   if (loading) {
-    return <div>Loading user information...</div>;
-  }
-
-  if (error) {
-    return <div className="alert alert-danger">{error}</div>;
+    return <div>Cargando información del usuario...</div>;
   }
 
   return (
-    <div className="user-container">
-      <h1>User Information</h1>
+    <div className="container mt-5">
+      <h1 className="mb-4">Información del Usuario</h1>
       {success && <div className="alert alert-success">{success}</div>}
+      {error && <div className="alert alert-danger">{error}</div>}
       {userInfo && (
-        <div className="user-info">
-          <div>
-            <label>Email:</label>
-            <input
-              type="email"
-              name="email"
-              value={userInfo.email || ""}
-              onChange={handleInputChange}
-              disabled={!editable}
-            />
-          </div>
-          <div>
-            <label>First Name:</label>
-            <input
-              type="text"
-              name="name"
-              value={userInfo.name || ""}
-              onChange={handleInputChange}
-              disabled={!editable}
-            />
-          </div>
-          <div>
-            <label>Last Name:</label>
-            <input
-              type="text"
-              name="lastName"
-              value={userInfo.lastName || ""}
-              onChange={handleInputChange}
-              disabled={!editable}
-            />
-          </div>
-          <div>
-            <label>Company:</label>
-            <input
-              type="text"
-              name="company"
-              value={userInfo.company || ""}
-              onChange={handleInputChange}
-              disabled={!editable}
-            />
-          </div>
-          <div>
-            <label>Job Title: </label>
-            <select
-              name="jobTitle"
-              value={userInfo.jobTitle || ""}
-              onChange={handleInputChange}
-              disabled={!editable}
-            >
-              <option value="">Select Job Title</option>
-              {jobTitles.map((title) => (
-                <option key={title} value={title}>
-                  {title}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label>Country: </label>
-            <select
-              name="country"
-              value={userInfo.country || ""}
-              onChange={handleInputChange}
-              disabled={!editable}
-            >
-              <option value="">Select Country</option>
-              {countries.map((country) => (
-                <option key={country} value={country}>
-                  {country}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="button-group">
-            {!firebaseUser?.emailVerified && (
-              <button onClick={verifyEmail} className="btn btn-warning">
-                Verify Email
-              </button>
-            )}
-            {!editable ? (
-              <button onClick={toggleEdit} className="btn btn-primary">
-                Edit
-              </button>
-            ) : (
-              <>
-                <button onClick={saveChanges} className="btn btn-success">
-                  Save Changes
+        <div className="card">
+          <div className="card-body">
+            <form>
+              <div className="mb-3">
+                <label className="form-label">Correo Electrónico:</label>
+                <input
+                  type="email"
+                  name="email"
+                  className="form-control"
+                  value={userInfo.email || ''}
+                  onChange={handleInputChange}
+                  disabled={!editable}
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Nombre:</label>
+                <input
+                  type="text"
+                  name="name"
+                  className="form-control"
+                  value={userInfo.name || ''}
+                  onChange={handleInputChange}
+                  disabled={!editable}
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Apellido:</label>
+                <input
+                  type="text"
+                  name="lastName"
+                  className="form-control"
+                  value={userInfo.lastName || ''}
+                  onChange={handleInputChange}
+                  disabled={!editable}
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Compañía:</label>
+                <input
+                  type="text"
+                  name="company"
+                  className="form-control"
+                  value={userInfo.company || ''}
+                  onChange={handleInputChange}
+                  disabled={!editable}
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Título Profesional:</label>
+                <select
+                  name="jobTitle"
+                  className="form-select"
+                  value={userInfo.jobTitle || ''}
+                  onChange={handleInputChange}
+                  disabled={!editable}
+                >
+                  <option value="">Selecciona un Título Profesional</option>
+                  {jobTitles.map((title) => (
+                    <option key={title} value={title}>
+                      {title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">País:</label>
+                <select
+                  name="country"
+                  className="form-select"
+                  value={userInfo.country || ''}
+                  onChange={handleInputChange}
+                  disabled={!editable}
+                >
+                  <option value="">Selecciona un País</option>
+                  {countries.map((country) => (
+                    <option key={country} value={country}>
+                      {country}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="d-flex justify-content-between mt-4">
+                {!firebaseUser?.emailVerified && (
+                  <button onClick={verifyEmail} type="button" className="btn btn-warning">
+                    Verificar Correo
+                  </button>
+                )}
+                {!editable ? (
+                  <button onClick={toggleEdit} type="button" className="btn btn-primary">
+                    Editar Información
+                  </button>
+                ) : (
+                  <>
+                    <button onClick={saveChanges} type="button" className="btn btn-success">
+                      Guardar Cambios
+                    </button>
+                    <button onClick={toggleEdit} type="button" className="btn btn-secondary">
+                      Cancelar
+                    </button>
+                  </>
+                )}
+                <button onClick={handleDeleteAccount} type="button" className="btn btn-danger">
+                  Eliminar Cuenta
                 </button>
-                <button onClick={toggleEdit} className="btn btn-secondary">
-                  Cancel
-                </button>
-              </>
-            )}
-            <button onClick={handleDeleteAccount} className="btn btn-danger">
-              Delete Account
-            </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

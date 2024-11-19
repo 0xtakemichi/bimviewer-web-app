@@ -1,5 +1,8 @@
 import { firebaseAnalytics } from '../firebase/index';
-import { logEvent } from 'firebase/analytics';
+import { logEvent, setAnalyticsCollectionEnabled  } from 'firebase/analytics';
+
+
+setAnalyticsCollectionEnabled(firebaseAnalytics, true);
 
 export const trackUserLogin = (uid: string) => {
   logEvent(firebaseAnalytics, 'user_login', { user_id: uid });
@@ -13,11 +16,10 @@ export const trackUserSignUp = (uid: string) => {
 };
 
 
-export const trackProjectCreation = (projectId: string, userId: string) => {
+export const trackProjectCreation = (projectId: string) => {
   logEvent(firebaseAnalytics, 'project_created', { 
-    project_id: projectId,
-    user_id: userId
-  });
+    project_id: projectId
+  }); 
   console.log(`Event user_signup sent for user_id: ${projectId}`); // Verifica en la consola
 
 };

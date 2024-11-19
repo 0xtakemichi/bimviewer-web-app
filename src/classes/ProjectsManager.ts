@@ -54,7 +54,7 @@ export class ProjectsManager {
     // Guardar en Firestore con el mismo `id`
     await setDoc(doc(firestoreDb, 'Projects', projectId), { ...project });
 
-    trackProjectCreation(projectId, owner);
+    trackProjectCreation(projectId);
   
     console.log('New project created with ID:', projectId); // Depuración
     

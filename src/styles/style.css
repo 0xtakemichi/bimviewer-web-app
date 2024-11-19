@@ -65,32 +65,18 @@ html.bim-ui-light {
   --bim-ui_accent-base: var(--bim-ui_main-base);
 }
 
-* {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-}
-
-button{
-  cursor: pointer;
-  font-size: 14px;
-  border-radius: 20px;
-  border: none;
-  /* display: flex; */
-  align-items: center;
-  column-gap: 5px;
-}
-button:hover{
-  background-color: #8c9cb7;
-}
-body {
+/* body {
   display: grid;
   height: 100vh;
   background-color:azure;
+} */
+html, body {
+  height: 100%;
+  margin: 0;
 }
-
-html {
-  font-family: sans-serif;
-  background-color: azure;
+.login-page {
+  height: 100%;
+  overflow: hidden;
 }
 
 bim-grid:not([floating]) > bim-panel {

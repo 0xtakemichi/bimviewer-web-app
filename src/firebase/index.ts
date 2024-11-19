@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app"
 import { getAuth } from "firebase/auth"
 import { getFirestore } from "firebase/firestore"
-import { getAnalytics, setAnalyticsCollectionEnabled } from "firebase/analytics"
+import { getAnalytics} from "firebase/analytics"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -20,7 +20,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-setAnalyticsCollectionEnabled(analytics, true);
 
 // Exportar las referencias necesarias
 export const firebaseAuth = getAuth(app);

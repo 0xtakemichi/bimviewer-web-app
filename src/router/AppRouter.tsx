@@ -70,9 +70,6 @@ class AppRouter extends Component<{}, { authed: boolean; loading: boolean }> {
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
-                  <Nav.Link as={Link} to="/">
-                    Home
-                  </Nav.Link>
                   <Nav.Link as={Link} to="/dashboard">
                     Dashboard
                   </Nav.Link>
@@ -105,7 +102,7 @@ class AppRouter extends Component<{}, { authed: boolean; loading: boolean }> {
                       <Nav.Link as={Link} to="/login">
                         LOG IN
                       </Nav.Link>
-                      
+
                       <Nav.Link as={Link} to="/register">
                         SIGN UP
                       </Nav.Link>
@@ -121,9 +118,10 @@ class AppRouter extends Component<{}, { authed: boolean; loading: boolean }> {
               <Route path="/login" element={<PublicRoute authed={this.state.authed} component={Login} />} />
               <Route path="/register" element={<PublicRoute authed={this.state.authed} component={Register} />} />
               <Route path="/dashboard" element={<PrivateRoute authed={this.state.authed} component={Dashboard} />} />
-              <Route path="/viewer" element={<PrivateRoute authed={this.state.authed} component={Viewer} />} />
+              {/* <Route path="/viewer" element={<PrivateRoute authed={this.state.authed} component={Viewer} />} /> */}
               <Route path="/user" element={<PrivateRoute authed={this.state.authed} component={UserPage} />} />
               <Route path="/projects" element={<PrivateRoute authed={this.state.authed} component={ProjectsPage} />} />
+              <Route path="/projects/viewer/:id" element={<PrivateRoute authed={this.state.authed} component={Viewer} />} />
               <Route path="*" element={<h3>No Match</h3>} />r
             </Routes>
           </Container>

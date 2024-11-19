@@ -76,9 +76,9 @@ class AppRouter extends Component<{}, { authed: boolean; loading: boolean }> {
                   <Nav.Link as={Link} to="/projects">
                     Projects
                   </Nav.Link>
-                  <Nav.Link as={Link} to="/viewer">
+                  {/* <Nav.Link as={Link} to="/viewer">
                     Viewer
-                  </Nav.Link>
+                  </Nav.Link> */}
                 </Nav>
                 <Nav>
                   {this.state.authed ? (

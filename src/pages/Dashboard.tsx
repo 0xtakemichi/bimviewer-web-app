@@ -5,6 +5,7 @@ import { useAuth } from '../hooks/AuthContext';
 const Dashboard: React.FC = () => {
   const { userData, loading } = useAuth();
 
+
   if (loading) {
     return <div>Loading...</div>;
   }

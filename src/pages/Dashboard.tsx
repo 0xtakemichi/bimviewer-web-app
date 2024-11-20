@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/AuthContext';
 import { generateUserReport } from '../utils/userReport';
 import { generateAdminReport } from '../utils/adminReport';
+import { exportManagementReportPDF } from '../utils/reportExportAdmin';
 import { exportToPDF, exportToCSV } from '../utils/reportExport';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Bar, Pie} from 'react-chartjs-2';
@@ -69,8 +70,19 @@ const Dashboard: React.FC = () => {
 
   const renderAdminDashboard = () => (
     <div className="container mt-4">
+      <div className="text-end mt-1 me-1">
+      <button 
+        className="btn btn-success mt-1 me-2" 
+        onClick={() => {
+          exportManagementReportPDF()
+            .then(() => alert('Informe exportado exitosamente en PDF.'))
+            .catch((error) => alert('Error al exportar el informe: ' + error.message));
+        }}
+      >
+        Exportar Informe de Gestión (PDF)
+      </button>
+    </div>
       <h1 className="mb-4 text-center">Informe de Gestión - Administrador</h1>
-
       <h4 className="mt-4">Usuarios por Empresa</h4>
       <ul className="list-group">
         {Object.entries(reportData.users.byCompany).map(([company, count]) => (

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/AuthContext';
 import { generateUserReport } from '../utils/userReport';
+import { generateAdminReport } from '../utils/adminReport';
 import { exportToPDF, exportToCSV } from '../utils/reportExport';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -9,9 +10,10 @@ const Dashboard: React.FC = () => {
   const [reportData, setReportData] = useState<any>(null);
 
   useEffect(() => {
-    if (userData?.uid && userData.role === 'basic') {
+    if (userData?.uid && userData?.role === 'basic') {
       generateUserReport(userData.uid).then((data) => setReportData(data));
     } else if (userData?.role === 'admin') {
+      generateAdminReport().then((data) => setReportData(data));
       console.log('Render de Admin');
     }
   }, [userData]);
@@ -24,10 +26,159 @@ const Dashboard: React.FC = () => {
 
   const renderAdminDashboard = () => (
     <div className="container mt-4">
-      <h1 className="mb-4">Dashboard de Administrador</h1>
-      <p>Bienvenido, {userData?.name} {userData?.lastName}.</p>
-      <p>Rol: {userData?.role}</p>
-      <button className="btn btn-primary mt-3">Generar Informe de Gestión</button>
+      <h1 className="mb-4 text-center">Informe de Gestión - Administrador</h1>
+  
+      {/* Sección de Usuarios */}
+      <h2 className="mt-4">Usuarios</h2>
+      <p><strong>Total de usuarios:</strong> {reportData.users.totalUsers}</p>
+  
+      <div className="row">
+        <div className="col-md-6">
+          <h4>Distribución de Roles</h4>
+          <ul className="list-group">
+            {Object.entries(reportData.users.roleDistribution).map(([role, count]) => (
+              <li className="list-group-item d-flex justify-content-between align-items-center" key={role}>
+                {role}
+                <span className="badge bg-primary rounded-pill">{String(count)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="col-md-6">
+          <h4>Usuarios por País</h4>
+          <ul className="list-group">
+            {Object.entries(reportData.users.byCountry).map(([country, count]) => (
+              <li className="list-group-item d-flex justify-content-between align-items-center" key={country}>
+                {country}
+                <span className="badge bg-success rounded-pill">{String(count)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+  
+      <h4 className="mt-4">Usuarios por Empresa</h4>
+      <ul className="list-group">
+        {Object.entries(reportData.users.byCompany).map(([company, count]) => (
+          <li className="list-group-item d-flex justify-content-between align-items-center" key={company}>
+            {company}
+            <span className="badge bg-info rounded-pill">{String(count)}</span>
+          </li>
+        ))}
+      </ul>
+  
+      <h4 className="mt-4">Usuarios Inactivos</h4>
+      <table className="table table-striped">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Último Inicio de Sesión</th>
+          </tr>
+        </thead>
+        <tbody>
+          {reportData.users.inactiveUsers.map((user: any) => (
+            <tr key={user.id}>
+              <td>{user.name}</td>
+              <td>{user.lastLogin}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+  
+      {/* Sección de Proyectos */}
+      <h2 className="mt-4">Proyectos</h2>
+      <p><strong>Total de proyectos:</strong> {reportData.projects.totalProjects}</p>
+  
+      <h4>Distribución por Estado</h4>
+      <ul className="list-group">
+        {Object.entries(reportData.projects.projectStatusDistribution).map(([status, count]) => (
+          <li className="list-group-item d-flex justify-content-between align-items-center" key={status}>
+            {status}
+            <span className="badge bg-warning rounded-pill">{String(count)}</span>
+          </li>
+        ))}
+      </ul>
+  
+      <p className="mt-3"><strong>Proyectos sin colaboradores:</strong> {reportData.projects.projectsWithoutCollaborators}</p>
+      <p><strong>Promedio de colaboradores por proyecto:</strong> {reportData.projects.avgCollaboratorsPerProject.toFixed(2)}</p>
+      <p><strong>Tasa de finalización de proyectos:</strong> {reportData.projects.completionRate.toFixed(2)}%</p>
+      <p><strong>Proyectos vencidos:</strong> {reportData.projects.overdueProjects}</p>
+      <p><strong>Proyectos creados en el último mes:</strong> {reportData.projects.projectsLastMonth}</p>
+  
+      <h4 className="mt-4">Duración Promedio de Proyectos Finalizados</h4>
+      <p>{reportData.projects.avgProjectDuration.toFixed(2)} días</p>
+  
+      <h4>Proyectos Más Colaborativos</h4>
+      <table className="table table-bordered">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Colaboradores</th>
+          </tr>
+        </thead>
+        <tbody>
+          {reportData.projects.mostCollaborativeProjects.map((project: any) => (
+            <tr key={project.id}>
+              <td>{project.name}</td>
+              <td>{project.numCollaborators}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+  
+      <h4>Proyectos Más Activos (Últimos 30 días)</h4>
+      <table className="table table-hover">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Actividades Recientes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {reportData.projects.mostActiveProjects.map((project: any) => (
+            <tr key={project.id}>
+              <td>{project.name}</td>
+              <td>{project.recentActivity}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+  
+      <h4>Proyectos Más Retrasados</h4>
+      <table className="table table-striped">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Días de Retraso</th>
+          </tr>
+        </thead>
+        <tbody>
+          {reportData.projects.mostDelayedProjects.map((project: any) => (
+            <tr key={project.id}>
+              <td>{project.name}</td>
+              <td>{project.delayDays}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+  
+      <h4>Crecimiento de Usuarios por Mes</h4>
+      <table className="table table-sm">
+        <thead>
+          <tr>
+            <th>Mes</th>
+            <th>Usuarios Nuevos</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Object.entries(reportData.projects.usersGrowth).map(([month, count]) => (
+            <tr key={month}>
+              <td>{month}</td>
+              <td>{String(count)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 

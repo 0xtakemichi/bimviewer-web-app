@@ -196,7 +196,7 @@ const Dashboard: React.FC = () => {
         </tbody>
       </table>
   
-      <h4>Proyectos Más Activos (Últimos 30 días)</h4>
+      {/* <h4>Proyectos Más Activos (Últimos 30 días)</h4>
       <table className="table table-hover">
         <thead>
           <tr>
@@ -212,7 +212,7 @@ const Dashboard: React.FC = () => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table> */}
   
       <h4>Proyectos Más Retrasados</h4>
       <table className="table table-striped">

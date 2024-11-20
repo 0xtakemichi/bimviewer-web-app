@@ -21,7 +21,7 @@ const Home = () => {
             src="/logo.png" // Ruta al logo en la carpeta public
             alt="IngeBIM Logo"
             className="mb-4" // Margen inferior para separar del texto
-            style={{ height: '200px' }} // Ajusta el tamaño según necesites
+            style={{ height: '300px' }} // Ajusta el tamaño según necesites
           />
           <h1 className="display-4 fw-bold">IngeBIM</h1>
           <p className="lead">
@@ -37,7 +37,7 @@ const Home = () => {
           <Carousel.Item>
             <img
               className="d-block w-100"
-              src="https://via.placeholder.com/800x400"
+              src="/bim.png"
               alt="Primer Slide"
             />
             <Carousel.Caption>
@@ -48,7 +48,7 @@ const Home = () => {
           <Carousel.Item>
             <img
               className="d-block w-100"
-              src="https://via.placeholder.com/800x400"
+              src="/recvirt.png "
               alt="Segundo Slide"
             />
             <Carousel.Caption>
@@ -59,7 +59,7 @@ const Home = () => {
           <Carousel.Item>
             <img
               className="d-block w-100"
-              src="https://via.placeholder.com/800x400"
+              src="animacion.png"
               alt="Tercer Slide"
             />
             <Carousel.Caption>
@@ -80,7 +80,7 @@ const Home = () => {
                   <Card.Text>
                     Desde estructuras hasta aguas servidas, nuestro equipo te ofrece soluciones personalizadas.
                   </Card.Text>
-                  <Button variant="outline-primary">Saber Más</Button>
+                  {/* <Button variant="outline-primary">Saber Más</Button> */}
                 </Card.Body>
               </Card>
             </Col>
@@ -91,7 +91,7 @@ const Home = () => {
                   <Card.Text>
                     Muestra tus proyectos de infraestructura con impacto visual y claridad.
                   </Card.Text>
-                  <Button variant="outline-primary">Ver Ejemplos</Button>
+                  {/* <Button variant="outline-primary">Ver Ejemplos</Button> */}
                 </Card.Body>
               </Card>
             </Col>
@@ -102,7 +102,7 @@ const Home = () => {
                   <Card.Text>
                     Vive tus proyectos en primera persona con tecnología avanzada.
                   </Card.Text>
-                  <Button variant="outline-primary">Experimentar</Button>
+                  {/* <Button variant="outline-primary">Experimentar</Button> */}
                 </Card.Body>
               </Card>
             </Col>
@@ -113,7 +113,7 @@ const Home = () => {
                   <Card.Text>
                     Gestión y coordinación BIM para proyectos de alta complejidad.
                   </Card.Text>
-                  <Button variant="outline-primary">Descubre Más</Button>
+                  {/* <Button variant="outline-primary">Descubre Más</Button> */}
                 </Card.Body>
               </Card>
             </Col>
@@ -124,7 +124,7 @@ const Home = () => {
                   <Card.Text>
                     Detección precisa de interferencias para evitar problemas en la ejecución.
                   </Card.Text>
-                  <Button variant="outline-primary">Más Información</Button>
+                  {/* <Button variant="outline-primary">Más Información</Button> */}
                 </Card.Body>
               </Card>
             </Col>

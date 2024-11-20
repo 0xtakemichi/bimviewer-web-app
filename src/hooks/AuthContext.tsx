@@ -68,6 +68,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         trackUserLogin(user.uid);
 
         // Verificar si el correo no está verificado tras un cambio
+        const userDocRef = doc(firestoreDb, 'Users', user.uid);
+        try {
+          await updateDoc(userDocRef, { lastLogin: new Date() }); // Actualiza lastLogin con la fecha actual
+        } catch (error) {
+          console.error('Error updating lastLogin:', error);
+        }
+        // Verificar si el correo no está verificado tras un cambio
         if (!user.emailVerified) {
           await signOut(firebaseAuth); // Cierra la sesión automáticamente
           alert('Please verify your email address to access your account.');

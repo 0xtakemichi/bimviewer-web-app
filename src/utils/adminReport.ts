@@ -119,12 +119,12 @@ export async function generateAdminReport() {
 
   const inactiveUsers = usersSnapshot.docs.filter((doc) => {
     const user = doc.data();
-    const lastLogin = user.lastLoginAt?.toDate();
-    return !lastLogin || lastLogin < new Date(Date.now() - 60 * 24 * 60 * 60 * 1000); // Últimos 60 días
+    const lastLogin = user.lastLogin?.toDate(); // Convertir Timestamp a Date
+    return !lastLogin || lastLogin > new Date(Date.now() - 60 * 24 * 60 * 60 * 1000); // Últimos 60 días
   }).map((doc) => ({
     id: doc.id,
     name: `${doc.data().name} ${doc.data().lastName}`,
-    lastLogin: doc.data().lastLoginAt?.toDate() || 'Nunca',
+    lastLogin: doc.data().lastLogin?.toDate()?.toLocaleString() || 'Nunca', // Mostrar como string legible
   }));
 
   const mostDelayedProjects = projectsSnapshot.docs

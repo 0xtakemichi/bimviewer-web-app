@@ -67,7 +67,7 @@ const Dashboard: React.FC = () => {
         ))}
       </ul>
   
-      <h4 className="mt-4">Usuarios Inactivos</h4>
+      <h4 className="mt-4">Usuarios Ultima Sesión</h4>
       <table className="table table-striped">
         <thead>
           <tr>

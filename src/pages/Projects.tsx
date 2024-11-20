@@ -180,14 +180,14 @@ const ProjectsPage: React.FC = () => {
                   </Card.Text>
                 </Card.Body>
               </Card>
-              <div className="text-end mt-1 me-3">
-          <Button
-            variant="outline-secondary"
-            onClick={() => setSelectedProject(project)}
-          >
-            Editar
-          </Button>
-        </div>
+              <div className="text-end mt-1 me-0">
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => setSelectedProject(project)}
+                >
+                  Editar
+                </Button>
+              </div>
             </Col>
           ))}
       </Row>

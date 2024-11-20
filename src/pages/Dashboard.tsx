@@ -39,36 +39,36 @@ const Dashboard: React.FC = () => {
 
   const { summary, userProjects, collaborationStats } = reportData;
 
-  const roleDistributionData = {
-    labels: Object.keys(reportData.users.roleDistribution),
-    datasets: [
-      {
-        label: 'Cantidad de Usuarios',
-        data: Object.values(reportData.users.roleDistribution),
-        backgroundColor: 'rgba(75, 192, 192, 0.5)',
-      },
-    ],
-  };
 
-  const countryDistributionData = {
-    labels: Object.keys(reportData.users.byCountry),
-    datasets: [
-      {
-        label: 'Usuarios por País',
-        data: Object.values(reportData.users.byCountry),
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.5)',
-          'rgba(54, 162, 235, 0.5)',
-          'rgba(255, 206, 86, 0.5)',
-          'rgba(75, 192, 192, 0.5)',
-          'rgba(153, 102, 255, 0.5)',
-        ],
-      },
-    ],
-  };
-
-
-  const renderAdminDashboard = () => (
+  const renderAdminDashboard = () => {
+    const roleDistributionData = {
+      labels: Object.keys(reportData.users.roleDistribution),
+      datasets: [
+        {
+          label: 'Cantidad de Usuarios',
+          data: Object.values(reportData.users.roleDistribution),
+          backgroundColor: 'rgba(75, 192, 192, 0.5)',
+        },
+      ],
+    };
+  
+    const countryDistributionData = {
+      labels: Object.keys(reportData.users.byCountry),
+      datasets: [
+        {
+          label: 'Usuarios por País',
+          data: Object.values(reportData.users.byCountry),
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.5)',
+            'rgba(54, 162, 235, 0.5)',
+            'rgba(255, 206, 86, 0.5)',
+            'rgba(75, 192, 192, 0.5)',
+            'rgba(153, 102, 255, 0.5)',
+          ],
+        },
+      ],
+    };
+    return(
     <div className="container mt-4">
       <div className="text-end mt-1 me-1">
       <button 
@@ -251,6 +251,7 @@ const Dashboard: React.FC = () => {
       </table>
     </div>
   );
+ };
 
   const renderUserDashboard = () => (
     <div className="container mt-4">

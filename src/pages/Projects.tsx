@@ -18,6 +18,15 @@ const ProjectsPage: React.FC = () => {
   const [selectedCollaboratorUID, setSelectedCollaboratorUID] = useState<string | null>(null);
   const [showAddCollaborator, setShowAddCollaborator] = useState(false);
   const [showRemoveCollaborator, setShowRemoveCollaborator] = useState(false);
+  const [showCreateProjectModal, setShowCreateProjectModal] = useState(false);
+  const [newProjectData, setNewProjectData] = useState({
+    name: '',
+    description: '',
+    status: 'Active' as 'Pending' | 'Active' | 'Finished',
+    userRole: 'Architect' as 'Architect' | 'Engineer' | 'Developer',
+    finishDate: new Date(),
+    createdAt: new Date(),
+  });
 
   useEffect(() => {
     if (firebaseUser) {
@@ -36,18 +45,9 @@ const ProjectsPage: React.FC = () => {
     navigate(`/projects/viewer/${projectId}`); // Redirige al visor del proyecto con su ID
   };
 
-  const handleCreateProject = async () => {
+  const handleCreateProjectWithData = async () => {
     if (!projectsManager || !firebaseUser) return;
-
-    const newProjectData = {
-      name: `Project ${Date.now()}`,
-      description: 'New project description',
-      status: 'Pending' as const,
-      userRole: 'Architect' as const,
-      finishDate: new Date(),
-      createdAt: new Date(),
-    };
-
+  
     try {
       await projectsManager.newProject(newProjectData, firebaseUser.uid);
       setProjects([...projectsManager.list]);
@@ -151,7 +151,7 @@ const ProjectsPage: React.FC = () => {
           />
         </Col>
         <Col md={6} className="text-md-end">
-          <Button variant="primary" onClick={handleCreateProject}>
+          <Button variant="primary" onClick={() => setShowCreateProjectModal(true)}>
             Create New Project
           </Button>
         </Col>
@@ -291,6 +291,86 @@ const ProjectsPage: React.FC = () => {
           </Button>
           <Button variant="danger" onClick={handleDeleteProject}>
             Delete Project
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal show={showCreateProjectModal} onHide={() => setShowCreateProjectModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Create New Project</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="newProjectName">
+              <Form.Label>Project Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter project name"
+                value={newProjectData.name}
+                onChange={(e) => setNewProjectData({ ...newProjectData, name: e.target.value })}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="newProjectDescription">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                placeholder="Enter project description"
+                value={newProjectData.description}
+                onChange={(e) => setNewProjectData({ ...newProjectData, description: e.target.value })}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="newProjectStatus">
+              <Form.Label>Status</Form.Label>
+              <Form.Select
+                aria-label="Select project status"
+                value={newProjectData.status}
+                onChange={(e) => setNewProjectData({ ...newProjectData, status: e.target.value as 'Pending' | 'Active' | 'Finished' })}
+              >
+                <option value="Pending">Pending</option>
+                <option value="Active">Active</option>
+                <option value="Finished">Finished</option>
+              </Form.Select>
+              <Form.Text className="text-muted">
+                Select the current status of the project.
+              </Form.Text>
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="newProjectRole">
+              <Form.Label>User Role</Form.Label>
+              <Form.Select
+                aria-label="Select user role"
+                value={newProjectData.userRole}
+                onChange={(e) => setNewProjectData({ ...newProjectData, userRole: e.target.value as 'Architect' | 'Engineer' | 'Developer' })}
+              >
+                <option value="Architect">Architect</option>
+                <option value="Engineer">Engineer</option>
+                <option value="Developer">Developer</option>
+              </Form.Select>
+              <Form.Text className="text-muted">
+                Select the role assigned to the user for this project.
+              </Form.Text>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="newProjectFinishDate">
+              <Form.Label>Finish Date</Form.Label>
+              <Form.Control
+                type="date"
+                value={newProjectData.finishDate.toISOString().split('T')[0]}
+                onChange={(e) => setNewProjectData({ ...newProjectData, finishDate: new Date(e.target.value) })}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowCreateProjectModal(false)}>
+            Cancel
+          </Button>
+          <Button
+            variant="primary"
+            onClick={async () => {
+              await handleCreateProjectWithData();
+              setShowCreateProjectModal(false);
+            }}
+          >
+            Create Project
           </Button>
         </Modal.Footer>
       </Modal>

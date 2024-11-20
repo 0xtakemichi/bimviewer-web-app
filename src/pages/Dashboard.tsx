@@ -4,6 +4,20 @@ import { generateUserReport } from '../utils/userReport';
 import { generateAdminReport } from '../utils/adminReport';
 import { exportToPDF, exportToCSV } from '../utils/reportExport';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Bar, Pie} from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+} from 'chart.js';
+
+ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend, ArcElement);
+
 
 const Dashboard: React.FC = () => {
   const { userData, loading } = useAuth();
@@ -24,10 +38,48 @@ const Dashboard: React.FC = () => {
 
   const { summary, userProjects, collaborationStats } = reportData;
 
+  const roleDistributionData = {
+    labels: Object.keys(reportData.users.roleDistribution),
+    datasets: [
+      {
+        label: 'Cantidad de Usuarios',
+        data: Object.values(reportData.users.roleDistribution),
+        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+      },
+    ],
+  };
+
+  const countryDistributionData = {
+    labels: Object.keys(reportData.users.byCountry),
+    datasets: [
+      {
+        label: 'Usuarios por País',
+        data: Object.values(reportData.users.byCountry),
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.5)',
+          'rgba(54, 162, 235, 0.5)',
+          'rgba(255, 206, 86, 0.5)',
+          'rgba(75, 192, 192, 0.5)',
+          'rgba(153, 102, 255, 0.5)',
+        ],
+      },
+    ],
+  };
+
+
   const renderAdminDashboard = () => (
     <div className="container mt-4">
       <h1 className="mb-4 text-center">Informe de Gestión - Administrador</h1>
-  
+
+      <h4 className="mt-4">Usuarios por Empresa</h4>
+      <ul className="list-group">
+        {Object.entries(reportData.users.byCompany).map(([company, count]) => (
+          <li className="list-group-item d-flex justify-content-between align-items-center" key={company}>
+            {company}
+            <span className="badge bg-info rounded-pill">{String(count)}</span>
+          </li>
+        ))}
+      </ul>
       {/* Sección de Usuarios */}
       <h2 className="mt-4">Usuarios</h2>
       <p><strong>Total de usuarios:</strong> {reportData.users.totalUsers}</p>
@@ -43,6 +95,9 @@ const Dashboard: React.FC = () => {
               </li>
             ))}
           </ul>
+              {/* Gráfico de Barras: Distribución de Roles */}
+              <h4 className="mt-4">Distribución de Roles</h4>
+              <Bar data={roleDistributionData} options={{ responsive: true, plugins: { legend: { position: 'top' } } }} />
         </div>
         <div className="col-md-6">
           <h4>Usuarios por País</h4>
@@ -54,6 +109,9 @@ const Dashboard: React.FC = () => {
               </li>
             ))}
           </ul>
+          {/* Gráfico de Torta: Usuarios por País */}
+          <h4 className="mt-4">Usuarios por País</h4>
+          <Pie data={countryDistributionData} options={{ responsive: true, plugins: { legend: { position: 'top' } } }} />
         </div>
       </div>
   

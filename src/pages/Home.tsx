@@ -11,7 +11,7 @@ const Home = () => {
         {/* Alerta de Novedades */}
         {showAlert && (
           <Alert variant="info" onClose={() => setShowAlert(false)} dismissible>
-            ¡Nueva funcionalidad! Explora nuestro visor web de modelos BIM ahora en tu navegador.
+            Explora nuestro visor web de modelos BIM en tu navegador.
           </Alert>
         )}
 
@@ -23,7 +23,7 @@ const Home = () => {
             className="mb-4" // Margen inferior para separar del texto
             style={{ height: '300px' }} // Ajusta el tamaño según necesites
           />
-          <h1 className="display-4 fw-bold">IngeBIM</h1>
+          <h1 className="display-4 fw-bold"></h1>
           <p className="lead">
             Soluciones en transformación digital para la industria de la ingeniería y construcción.
           </p>
@@ -142,7 +142,7 @@ const Home = () => {
           <p>Email: <a href="mailto:contacto@ingenieriabim.cl">contacto@ingenieriabim.cl</a></p>
           <p>Ubicación: Santiago de Chile</p>
           <div className="social-media">
-            <Button variant="outline-info" href="https://www.linkedin.com" target="_blank">
+            <Button variant="outline-info" href="https://www.linkedin.com/company/ingebim/" target="_blank">
               LinkedIn
             </Button>{' '}
             <Button variant="outline-success" href="https://wa.me" target="_blank">

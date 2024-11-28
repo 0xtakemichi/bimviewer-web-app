@@ -52,7 +52,7 @@ const ProjectsPage: React.FC = () => {
       await projectsManager.newProject(newProjectData, firebaseUser.uid);
       setProjects([...projectsManager.list]);
     } catch (error) {
-      console.error('Error creating project:', error);
+      console.error('Error al crear el proyecto:', error);
     }
   };
 
@@ -68,14 +68,14 @@ const ProjectsPage: React.FC = () => {
       setProjects([...projectsManager.list]);
       setSelectedProject(null);
     } catch (error) {
-      console.error('Error updating project:', error);
+      console.error('Error al actualizar el proyecto:', error);
     }
   };
 
   const handleDeleteProject = async () => {
     if (!projectsManager || !selectedProject) return;
 
-    const confirmDelete = window.confirm('Are you sure you want to delete this project?');
+    const confirmDelete = window.confirm('¿Estás seguro de que deseas eliminar este proyecto?');
     if (!confirmDelete) return;
 
     try {
@@ -83,7 +83,7 @@ const ProjectsPage: React.FC = () => {
       setProjects([...projectsManager.list]);
       setSelectedProject(null);
     } catch (error) {
-      console.error('Error deleting project:', error);
+      console.error('Error al eliminar el proyecto:', error);
     }
   };
 
@@ -93,7 +93,7 @@ const ProjectsPage: React.FC = () => {
     try {
       await projectsManager.addCollaborator(selectedProject.id, collaboratorEmail);
       setProjects([...projectsManager.list]);
-      alert('Collaborator added successfully!');
+      alert('Colaborador añadido con éxito');
     } catch (error: any) {
       alert(error.message);
     } finally {
@@ -108,7 +108,7 @@ const ProjectsPage: React.FC = () => {
     try {
       await projectsManager.removeCollaborator(selectedProject.id, selectedCollaboratorUID);
       setProjects([...projectsManager.list]);
-      alert('Collaborator removed successfully!');
+      alert('Colaborador eliminado con éxito');
     } catch (error: any) {
       alert(error.message);
     } finally {
@@ -138,21 +138,21 @@ const ProjectsPage: React.FC = () => {
     <Container className="py-5">
       <Row className="mb-4">
         <Col>
-          <h1 className="text-center">My Projects</h1>
+          <h1 className="text-center">Mis Proyectos</h1>
         </Col>
       </Row>
       <Row className="mb-4">
         <Col md={6}>
           <Form.Control
             type="text"
-            placeholder="Search projects..."
+            placeholder="Buscar proyectos..."
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
           />
         </Col>
         <Col md={6} className="text-md-end">
           <Button variant="primary" onClick={() => setShowCreateProjectModal(true)}>
-            Create New Project
+            Crear Nuevo Proyecto
           </Button>
         </Col>
       </Row>
@@ -195,12 +195,12 @@ const ProjectsPage: React.FC = () => {
       {/* Modal for Editing Project */}
       <Modal show={!!selectedProject} onHide={() => setSelectedProject(null)}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit Project</Modal.Title>
+          <Modal.Title>Editar Proyecto</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3" controlId="projectName">
-              <Form.Label>Name</Form.Label>
+              <Form.Label>Nombre del Proyecto</Form.Label>
               <Form.Control
                 type="text"
                 name="name"
@@ -209,7 +209,7 @@ const ProjectsPage: React.FC = () => {
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="projectDescription">
-              <Form.Label>Description</Form.Label>
+              <Form.Label>Descripción</Form.Label>
               <Form.Control
                 as="textarea"
                 name="description"
@@ -218,7 +218,7 @@ const ProjectsPage: React.FC = () => {
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="projectStatus">
-              <Form.Label>Status</Form.Label>
+              <Form.Label>Estado</Form.Label>
               <Form.Select
                 name="status"
                 value={selectedProject?.status || 'Pending'}
@@ -236,18 +236,18 @@ const ProjectsPage: React.FC = () => {
               className="mb-2"
               onClick={() => setShowAddCollaborator((prev) => !prev)}
             >
-              {showAddCollaborator ? 'Cancel Add Collaborator' : 'Add Collaborator'}
+              {showAddCollaborator ? 'Cancelar Agregar Colaborador' : 'Agregar Colaborador'}
             </Button>
             {showAddCollaborator && (
               <Form.Group className="mb-3">
                 <Form.Control
                   type="email"
-                  placeholder="Collaborator's email"
+                  placeholder="Ingrese correo electrónico del colaborador"
                   value={collaboratorEmail}
                   onChange={(e) => setCollaboratorEmail(e.target.value)}
                 />
                 <Button onClick={handleAddCollaborator} className="mt-2">
-                  Add
+                  Agregar
                 </Button>
               </Form.Group>
             )}
@@ -258,7 +258,7 @@ const ProjectsPage: React.FC = () => {
               className="mb-2"
               onClick={() => setShowRemoveCollaborator((prev) => !prev)}
             >
-              {showRemoveCollaborator ? 'Cancel Remove Collaborator' : 'Remove Collaborator'}
+              {showRemoveCollaborator ? 'Cancelar Eliminar Colaborador' : 'Eliminar Colaborador'}
             </Button>
             {showRemoveCollaborator && (
               <Form.Group className="mb-3">
@@ -267,7 +267,7 @@ const ProjectsPage: React.FC = () => {
                   defaultValue=""
                 >
                   <option value="" disabled>
-                    Select a collaborator
+                    Selecciona un colaborador
                   </option>
                   {selectedProject?.collaborators.map((uid) => (
                     <option key={uid} value={uid}>
@@ -276,7 +276,7 @@ const ProjectsPage: React.FC = () => {
                   ))}
                 </Form.Select>
                 <Button onClick={handleRemoveCollaborator} className="mt-2">
-                  Remove
+                  Eliminar Colaborador
                 </Button>
               </Form.Group>
             )}
@@ -284,42 +284,42 @@ const ProjectsPage: React.FC = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="success" onClick={handleEditProject}>
-            Save Changes
+            Guardar Cambios
           </Button>
           <Button variant="secondary" onClick={() => setSelectedProject(null)}>
-            Cancel
+            Cancelar
           </Button>
           <Button variant="danger" onClick={handleDeleteProject}>
-            Delete Project
+            Eliminar Proyecto
           </Button>
         </Modal.Footer>
       </Modal>
       <Modal show={showCreateProjectModal} onHide={() => setShowCreateProjectModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Create New Project</Modal.Title>
+          <Modal.Title>Crear Nuevo Proyecto</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3" controlId="newProjectName">
-              <Form.Label>Project Name</Form.Label>
+              <Form.Label>Nombre del Proyecto</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter project name"
+                placeholder="Ingrese nombre del proyecto"
                 value={newProjectData.name}
                 onChange={(e) => setNewProjectData({ ...newProjectData, name: e.target.value })}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="newProjectDescription">
-              <Form.Label>Description</Form.Label>
+              <Form.Label>Descripción</Form.Label>
               <Form.Control
                 as="textarea"
-                placeholder="Enter project description"
+                placeholder="Ingrese una descripción"
                 value={newProjectData.description}
                 onChange={(e) => setNewProjectData({ ...newProjectData, description: e.target.value })}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="newProjectStatus">
-              <Form.Label>Status</Form.Label>
+              <Form.Label>Estado</Form.Label>
               <Form.Select
                 aria-label="Select project status"
                 value={newProjectData.status}
@@ -330,12 +330,12 @@ const ProjectsPage: React.FC = () => {
                 <option value="Finished">Finished</option>
               </Form.Select>
               <Form.Text className="text-muted">
-                Select the current status of the project.
+                Seleccione el estado actual del proyecto
               </Form.Text>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="newProjectRole">
-              <Form.Label>User Role</Form.Label>
+              <Form.Label>Rol de Usuario</Form.Label>
               <Form.Select
                 aria-label="Select user role"
                 value={newProjectData.userRole}
@@ -346,11 +346,11 @@ const ProjectsPage: React.FC = () => {
                 <option value="Developer">Developer</option>
               </Form.Select>
               <Form.Text className="text-muted">
-                Select the role assigned to the user for this project.
+                Seleccione el rol asignado al usuario para este proyecto.
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3" controlId="newProjectFinishDate">
-              <Form.Label>Finish Date</Form.Label>
+              <Form.Label>Fecha de Finalización</Form.Label>
               <Form.Control
                 type="date"
                 value={newProjectData.finishDate.toISOString().split('T')[0]}
@@ -361,7 +361,7 @@ const ProjectsPage: React.FC = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowCreateProjectModal(false)}>
-            Cancel
+            Cancelar
           </Button>
           <Button
             variant="primary"
@@ -370,7 +370,7 @@ const ProjectsPage: React.FC = () => {
               setShowCreateProjectModal(false);
             }}
           >
-            Create Project
+            Crear Proyecto
           </Button>
         </Modal.Footer>
       </Modal>

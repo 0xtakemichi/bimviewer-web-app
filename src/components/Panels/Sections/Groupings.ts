@@ -70,14 +70,14 @@ export default (components: OBC.Components) => {
 
   return BUI.Component.create<BUI.PanelSection>(() => {
     return BUI.html`
-      <bim-panel-section label="Custom Selections" icon="clarity:blocks-group-solid">
+      <bim-panel-section label="Selecciones Personalizadas" icon="clarity:blocks-group-solid">
         <div ${BUI.ref(onFormCreated)} style="display: none; gap: 0.5rem">
-          <bim-text-input ${BUI.ref(onGroupNameInputCreated)} placeholder="Selection Name..." vertical></bim-text-input>
-          <bim-button @click=${onSaveGroupSelection} icon="mingcute:check-fill" style="flex: 0" label="Accept"></bim-button>
-          <bim-button @click=${onCancelGroupCreation} icon="mingcute:close-fill" style="flex: 0" label="Cancel"></bim-button>
+          <bim-text-input ${BUI.ref(onGroupNameInputCreated)} placeholder="Nombre de la Selección..." vertical></bim-text-input>
+          <bim-button @click=${onSaveGroupSelection} icon="mingcute:check-fill" style="flex: 0" label="Aceptar"></bim-button>
+          <bim-button @click=${onCancelGroupCreation} icon="mingcute:close-fill" style="flex: 0" label="Cancelar"></bim-button>
         </div>
         ${customSelectionsTable}
-        <bim-button style="display: none;" ${BUI.ref(onSaveSelectionCreated)} @click=${onNewSelection} label="Save Selection"></bim-button>
+        <bim-button style="display: none;" ${BUI.ref(onSaveSelectionCreated)} @click=${onNewSelection} label="Guardar Selección"></bim-button>
       </bim-panel-section>
     `;
   });

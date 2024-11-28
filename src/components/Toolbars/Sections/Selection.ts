@@ -86,11 +86,11 @@ export default (components: OBC.Components, world?: OBC.World) => {
 
   return BUI.Component.create<BUI.PanelSection>(() => {
     return BUI.html`
-      <bim-toolbar-section label="Selection" icon="ph:cursor-fill">
-        <bim-button @click=${onShowAll} label="Show All" icon="tabler:eye-filled" tooltip-title="Show All" tooltip-text="Shows all elements in all models."></bim-button>
-        <bim-button @click=${onToggleVisibility} label="Toggle Visibility" icon="tabler:square-toggle" tooltip-title="Toggle Visibility" tooltip-text="From the current selection, hides visible elements and shows hidden elements."></bim-button>
-        <bim-button @click=${onIsolate} label="Isolate" icon="prime:filter-fill" tooltip-title="Isolate" tooltip-text="Isolates the current selection."></bim-button>
-        <bim-button @click=${onFocusSelection} label="Focus" icon="ri:focus-mode" tooltip-title="Focus" tooltip-text="Focus the camera to the current selection."></bim-button>
+      <bim-toolbar-section label="Selección" icon="ph:cursor-fill">
+        <bim-button @click=${onShowAll} label="Mostrar Todo" icon="tabler:eye-filled" tooltip-title="Mostrar Todo" tooltip-text="Muestra todos los elementos en todos los modelos."></bim-button>
+        <bim-button @click=${onToggleVisibility} label="Alternar Visibilidad" icon="tabler:square-toggle" tooltip-title="Alternar Visibilidad" tooltip-text="De la selección actual, oculta los elementos visibles y muestra los elementos ocultos."></bim-button>
+        <bim-button @click=${onIsolate} label="Aislar" icon="prime:filter-fill" tooltip-title="Aislar" tooltip-text="Aísla la selección actual."></bim-button>
+        <bim-button @click=${onFocusSelection} label="Enfocar" icon="ri:focus-mode" tooltip-title="Enfocar" tooltip-text="Enfoca la cámara en la selección actual."></bim-button>
       </bim-toolbar-section> 
     `;
   });

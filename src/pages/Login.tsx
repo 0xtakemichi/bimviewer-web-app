@@ -21,7 +21,7 @@ const Login: React.FC = () => {
       try {
         await login(email, password);
       } catch (error) {
-        setLoginMessage(setErrorMsg('Invalid username/password.'));
+        setLoginMessage(setErrorMsg('Campo incorrecto correo/contraseña.'));
       }
     }
   };
@@ -32,9 +32,9 @@ const Login: React.FC = () => {
     if (email) {
       try {
         await resetPassword(email);
-        setLoginMessage(`Password reset email sent to ${email}.`);
+        setLoginMessage(`Correo de restablecimiento de contraseña enviado a ${email}.`);
       } catch {
-        setLoginMessage(`Email address not found.`);
+        setLoginMessage(`Dirección de correo electrónico no encontrada`);
       }
     }
   };
@@ -42,30 +42,29 @@ const Login: React.FC = () => {
   return (
     <Container fluid className="login-page d-flex justify-content-center align-items-center vh-100 bg-light">
       <Card className="p-4 shadow-lg" style={{ maxWidth: '400px', width: '100%' }}>
-        <h2 className="text-center mb-4">Log In</h2>
+        <h2 className="text-center mb-4">Iniciar sesión</h2>
         {loginMessage && <Alert variant="danger">{loginMessage}</Alert>}
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Email</Form.Label>
+            <Form.Label>Correo</Form.Label>
             <Form.Control
               type="email"
-              placeholder="Enter email"
+              placeholder="Correo electrónico"
               ref={emailRef}
             />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
+            <Form.Label>Contraseña</Form.Label>
             <Form.Control
               type="password"
-              placeholder="Password"
+              placeholder="Contraseña"
               ref={pwRef}
             />
           </Form.Group>
 
           {loginMessage && (
-            <Alert variant="danger">
-              {loginMessage}{' '}
+            <Alert variant="" className="text-center">
               <Alert.Link
                 href="#"
                 onClick={(e) => {
@@ -73,13 +72,13 @@ const Login: React.FC = () => {
                   handleResetPassword();
                 }}
               >
-                Forgot Password?
+                ¿Olvidó su contraseña?
               </Alert.Link>
             </Alert>
           )}
 
           <Button variant="primary" type="submit" className="w-100">
-            Log In
+            Ingresar
           </Button>
         </Form>
       </Card>

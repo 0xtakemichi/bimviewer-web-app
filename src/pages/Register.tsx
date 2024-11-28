@@ -36,43 +36,43 @@ const Register: React.FC = () => {
         const userCredential = await auth(email, password, { name, lastName, company, jobTitle, country });
         trackUserSignUp(userCredential.user.uid);
       } catch (error: any) {
-        setErrorMsg(error.message || 'An error occurred during registration.');
+        setErrorMsg(error.message || 'Se produjo un error durante el registro.');
       }
     } else {
-      setErrorMsg('All fields are required.');
+      setErrorMsg('Todos los campos son obligatorios.');
     }
   };
 
   return (
     <Container fluid className="d-flex justify-content-center align-items-center vh-100 bg-light">
       <Card className="p-4 shadow-lg" style={{ maxWidth: '500px', width: '100%' }}>
-        <h2 className="text-center mb-4">Sign Up</h2>
+        <h2 className="text-center mb-4">Registrate</h2>
         {registerError && <Alert variant="danger">{registerError}</Alert>}
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formEmail">
-            <Form.Label>Email</Form.Label>
-            <Form.Control type="email" placeholder="Enter email" ref={emailRef} />
+            <Form.Label>Correo</Form.Label>
+            <Form.Control type="email" placeholder="Correro electrónico" ref={emailRef} />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control type="password" placeholder="Password" ref={pwRef} />
+            <Form.Label>Contraseña</Form.Label>
+            <Form.Control type="password" placeholder="Contraseña" ref={pwRef} />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formFirstName">
-            <Form.Label>First Name</Form.Label>
-            <Form.Control type="text" placeholder="First Name" ref={nameRef} />
+            <Form.Label>Nombre</Form.Label>
+            <Form.Control type="text" placeholder="Nombre" ref={nameRef} />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formLastName">
-            <Form.Label>Last Name</Form.Label>
-            <Form.Control type="text" placeholder="Last Name" ref={lastNameRef} />
+            <Form.Label>Apellido</Form.Label>
+            <Form.Control type="text" placeholder="Apellido" ref={lastNameRef} />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formCompany">
-            <Form.Label>Company</Form.Label>
-            <Form.Control type="text" placeholder="Company" ref={companyRef} />
+            <Form.Label>Compañia</Form.Label>
+            <Form.Control type="text" placeholder="Compañia" ref={companyRef} />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formJobTitle">
-            <Form.Label>Job Title</Form.Label>
+            <Form.Label>Título Profesional</Form.Label>
             <Form.Select ref={jobTitleRef}>
-              <option value="">Select Job Title</option>
+              <option value="">Seleccione el título del puesto</option>
               {jobTitles.map((title) => (
                 <option key={title} value={title}>
                   {title}
@@ -81,9 +81,9 @@ const Register: React.FC = () => {
             </Form.Select>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formCountry">
-            <Form.Label>Country</Form.Label>
+            <Form.Label>País</Form.Label>
             <Form.Select ref={countryRef}>
-              <option value="">Select Country</option>
+              <option value="">Seleccione país</option>
               {countries.map((country) => (
                 <option key={country} value={country}>
                   {country}
@@ -92,7 +92,7 @@ const Register: React.FC = () => {
             </Form.Select>
           </Form.Group>
           <Button variant="primary" type="submit" className="w-100">
-            Sign Up
+            Registrarse
           </Button>
         </Form>
       </Card>

@@ -25,7 +25,7 @@ function PrivateRoute({ component: Component, authed }: RouteProps) {
 
 // PublicRoute: solo permite acceso si el usuario no está autenticado
 function PublicRoute({ component: Component, authed }: RouteProps) {
-  return !authed ? <Component /> : <Navigate to="/dashboard" replace />;
+  return !authed ? <Component /> : <Navigate to="/projects" replace />;
 }
 
 // Componente principal del Router
@@ -53,7 +53,7 @@ class AppRouter extends Component<{}, { authed: boolean; loading: boolean }> {
 
   render() {
     return this.state.loading ? (
-      <h1>Loading</h1>
+      <h1>Cargando</h1>
     ) : (
       <BrowserRouter>
         <div>
@@ -71,10 +71,10 @@ class AppRouter extends Component<{}, { authed: boolean; loading: boolean }> {
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
                   <Nav.Link as={Link} to="/dashboard">
-                    Dashboard
+                    Panel
                   </Nav.Link>
                   <Nav.Link as={Link} to="/projects">
-                    Projects
+                    Proyectos
                   </Nav.Link>
                   {/* <Nav.Link as={Link} to="/viewer">
                     Viewer
@@ -84,7 +84,7 @@ class AppRouter extends Component<{}, { authed: boolean; loading: boolean }> {
                   {this.state.authed ? (
                     <>
                       <Nav.Link as={Link} to="/user">
-                        Profile
+                        Perfil
                       </Nav.Link>
                       <Button
                         variant="outline-light"
@@ -94,17 +94,17 @@ class AppRouter extends Component<{}, { authed: boolean; loading: boolean }> {
                         }}
                         className="ms-2"
                       >
-                        Log Out
+                        Cerrar sesión
                       </Button>
                     </>
                   ) : (
                     <>
                       <Nav.Link as={Link} to="/login">
-                        LOG IN
+                        Iniciar sesión
                       </Nav.Link>
 
                       <Nav.Link as={Link} to="/register">
-                        SIGN UP
+                        Registrate
                       </Nav.Link>
                     </>
                   )}
@@ -122,7 +122,7 @@ class AppRouter extends Component<{}, { authed: boolean; loading: boolean }> {
               <Route path="/user" element={<PrivateRoute authed={this.state.authed} component={UserPage} />} />
               <Route path="/projects" element={<PrivateRoute authed={this.state.authed} component={ProjectsPage} />} />
               <Route path="/projects/viewer/:id" element={<PrivateRoute authed={this.state.authed} component={Viewer} />} />
-              <Route path="*" element={<h3>No Match</h3>} />r
+              <Route path="*" element={<h3>Enlace Incorrecto</h3>} />r
             </Routes>
           </Container>
         </div>

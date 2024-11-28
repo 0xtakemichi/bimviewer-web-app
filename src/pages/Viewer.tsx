@@ -135,15 +135,15 @@ const Viewer: React.FC = () => {
       const leftPanel = BUI.Component.create(() => {
         return BUI.html`
           <bim-tabs switchers-full>
-            <bim-tab name="project" label="Project" icon="ph:building-fill">
+            <bim-tab name="project" label="Proyecto" icon="ph:building-fill">
               ${projectInformationPanel}
             </bim-tab>
-            <bim-tab name="settings" label="Settings" icon="solar:settings-bold">
+            <bim-tab name="settings" label="Configuración" icon="solar:settings-bold">
               ${settings(components)}
             </bim-tab>
-            <bim-tab name="help" label="Help" icon="material-symbols:help">
+            <!-- <bim-tab name="help" label="Help" icon="material-symbols:help">
               ${help}
-            </bim-tab>
+            </bim-tab> -->
           </bim-tabs> 
         `;
       });

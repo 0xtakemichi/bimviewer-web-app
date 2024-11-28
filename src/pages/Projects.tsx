@@ -165,17 +165,18 @@ const ProjectsPage: React.FC = () => {
             <Col key={project.id} md={4} className="mb-4">
               <Card onClick={() => handleCardClick(project.id)} className="selectable-card">
                 <Card.Body>
-                  <Card.Title>{project.name}</Card.Title>
+                  <Card.Title className='text-center'>{project.name}</Card.Title>
+                  <hr />
                   <Card.Text>{project.description}</Card.Text>
                   <Card.Text>
-                    <strong>Status:</strong> {project.status}
+                    <strong>Estado:</strong> {project.status}
                   </Card.Text>
                   <Card.Text>
-                    <strong>Role:</strong>{' '}
+                    <strong>Rol de usuario:</strong>{' '}
                     {project.owner === firebaseUser?.uid ? 'Owner' : 'Collaborator'}
                   </Card.Text>
                   <Card.Text>
-                    <strong>Collaborators:</strong>{' '}
+                    <strong>Colaboradores:</strong>{' '}
                     {project.collaborators.join(', ') || 'None'}
                   </Card.Text>
                 </Card.Body>

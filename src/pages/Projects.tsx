@@ -15,6 +15,7 @@ const ProjectsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [searchValue, setSearchValue] = useState<string>('');
   const [collaboratorEmail, setCollaboratorEmail] = useState<string>('');
+  const [collaboratorNames, setCollaboratorNames] = useState<Record<string, { name: string, lastName: string }>>({});
   const [selectedCollaboratorUID, setSelectedCollaboratorUID] = useState<string | null>(null);
   const [showAddCollaborator, setShowAddCollaborator] = useState(false);
   const [showRemoveCollaborator, setShowRemoveCollaborator] = useState(false);
@@ -37,6 +38,16 @@ const ProjectsPage: React.FC = () => {
       manager.fetchProjects(firebaseUser.uid).then(() => {
         setProjects(manager.list);
         setLoading(false);
+
+        const allCollaboratorUIDs = manager.list.flatMap(project => project.collaborators);
+        const uniqueUIDs = Array.from(new Set(allCollaboratorUIDs)); // Evitar duplicados
+        manager.getCollaboratorNames(uniqueUIDs)
+          .then((names) => {
+            setCollaboratorNames(names); // Guardar los nombres en el estado
+          })
+          .catch((error) => {
+            console.error('Error al obtener los nombres de los colaboradores:', error);
+          });
       });
     }
   }, [firebaseUser]);
@@ -93,7 +104,23 @@ const ProjectsPage: React.FC = () => {
     try {
       await projectsManager.addCollaborator(selectedProject.id, collaboratorEmail);
       setProjects([...projectsManager.list]);
+
+      const updatedProject = projectsManager.list.find(project => project.id === selectedProject.id);
+      if (updatedProject) {
+        const newCollaborators = updatedProject.collaborators.slice(-1); // Tomar el último colaborador agregado
+        projectsManager.getCollaboratorNames(newCollaborators)
+          .then((names) => {
+            setCollaboratorNames(prevState => ({
+              ...prevState,
+              ...names // Agregar el nuevo colaborador al estado
+            }));
+          })
+          .catch((error) => {
+            console.error('Error al obtener los nombres del colaborador:', error);
+          });
+      }
       alert('Colaborador añadido con éxito');
+
     } catch (error: any) {
       alert(error.message);
     } finally {
@@ -177,7 +204,12 @@ const ProjectsPage: React.FC = () => {
                   </Card.Text>
                   <Card.Text>
                     <strong>Colaboradores:</strong>{' '}
-                    {project.collaborators.join(', ') || 'None'}
+                    {project.collaborators.map((uid) => {
+                      const collaborator = collaboratorNames[uid];
+                      return collaborator 
+                        ? `${collaborator.name} ${collaborator.lastName}` 
+                        : uid;
+                    }).join(', ') || '-'}
                   </Card.Text>
                 </Card.Body>
               </Card>
@@ -272,7 +304,9 @@ const ProjectsPage: React.FC = () => {
                   </option>
                   {selectedProject?.collaborators.map((uid) => (
                     <option key={uid} value={uid}>
-                      {uid}
+                      {collaboratorNames[uid] 
+                      ? `${collaboratorNames[uid].name} ${collaboratorNames[uid].lastName}` 
+                      : uid}
                     </option>
                   ))}
                 </Form.Select>

@@ -182,5 +182,28 @@ export class ProjectsManager {
       throw error;
     }
   }
+  async getCollaboratorNames(uids: string[]): Promise<Record<string, { name: string, lastName: string }>> {
+    try {
+      const usersRef = collection(firestoreDb, 'Users');
+      const userQueries = uids.map(uid => getDoc(doc(usersRef, uid))); // Consultar todos los usuarios en paralelo
+      const userSnapshots = await Promise.all(userQueries);
+      
+      const collaboratorNames = userSnapshots.reduce((acc, userDoc) => {
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          acc[userDoc.id] = {
+            name: userData.name || 'Desconocido',
+            lastName: userData.lastName || ''
+          };
+        }
+        return acc;
+      }, {} as Record<string, { name: string, lastName: string }>);
+  
+      return collaboratorNames;
+    } catch (error) {
+      console.error('Error fetching collaborator names:', error);
+      throw error;
+    }
+  }
   
 }

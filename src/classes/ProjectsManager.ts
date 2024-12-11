@@ -77,7 +77,7 @@ export class ProjectsManager {
   async deleteProject(id: string): Promise<void> {
     const projectIndex = this.list.findIndex(project => project.id === id);
     if (projectIndex === -1) {
-      throw new Error("Project not found");
+      throw new Error("Proyecto no encontrado");
     }
 
     // Eliminar de Firestore
@@ -105,7 +105,7 @@ export class ProjectsManager {
       const querySnapshot = await getDocs(q);
     
       if (querySnapshot.empty) {
-        throw new Error(`No user found with email: ${collaboratorEmail}`);
+        throw new Error(`Ningún usuario encontrado con el correo electrónico: ${collaboratorEmail}`);
       }
   
       const collaboratorUID = querySnapshot.docs[0].id; // UID del colaborador
@@ -114,18 +114,18 @@ export class ProjectsManager {
       const projectRef = doc(firestoreDb, 'Projects', projectId);
       const projectDoc = await getDoc(projectRef);
       if (!projectDoc.exists()) {
-        throw new Error('Project not found');
+        throw new Error('Proyecto no encontrado');
       }
   
       const projectData = projectDoc.data() as IProject;
   
       // Verificar si el colaborador ya está en la lista o es el owner
       if (projectData.owner === collaboratorUID) {
-        throw new Error("The owner cannot be added as a collaborator.");
+        throw new Error("El propietario no puede ser agregado como colaborador.");
       }
   
       if (projectData.collaborators.includes(collaboratorUID)) {
-        throw new Error("This collaborator is already added.");
+        throw new Error("Este colaborador ya está agregado.");
       }
   
       // Actualizar el proyecto en Firestore
@@ -141,7 +141,7 @@ export class ProjectsManager {
   
       console.log(`Collaborator ${collaboratorUID} added to project ${projectId}`);
     } catch (error) {
-      console.error('Error adding collaborator:', error);
+      console.error('Error al añadir colaborador:', error);
       throw error;
     }
   }
@@ -153,14 +153,14 @@ export class ProjectsManager {
       const projectDoc = await getDoc(projectRef);
   
       if (!projectDoc.exists()) {
-        throw new Error('Project not found');
+        throw new Error('Proyecto no encontrado');
       }
   
       const projectData = projectDoc.data() as IProject;
   
       // Verificar si el colaborador existe en la lista
       if (!projectData.collaborators.includes(collaboratorUID)) {
-        throw new Error("Collaborator not found in the project.");
+        throw new Error("Colaborador no encontrado en el proyecto.");
       }
   
       // Actualizar Firestore para remover el colaborador
@@ -176,9 +176,9 @@ export class ProjectsManager {
         );
       }
   
-      console.log(`Collaborator ${collaboratorUID} removed from project ${projectId}`);
+      console.log(`Colaborador ${collaboratorUID} removido del proyecto: ${projectId}`);
     } catch (error) {
-      console.error('Error removing collaborator:', error);
+      console.error('Error al eliminar colaborador:', error);
       throw error;
     }
   }

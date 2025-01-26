@@ -76,9 +76,9 @@ class AppRouter extends Component<{}, { authed: boolean; loading: boolean }> {
                   <Nav.Link as={Link} to="/projects">
                     Proyectos
                   </Nav.Link>
-                  {/* <Nav.Link as={Link} to="/viewer">
+                  <Nav.Link as={Link} to="/viewer">
                     Viewer
-                  </Nav.Link> */}
+                  </Nav.Link>
                 </Nav>
                 <Nav>
                   {this.state.authed ? (
@@ -118,7 +118,7 @@ class AppRouter extends Component<{}, { authed: boolean; loading: boolean }> {
               <Route path="/login" element={<PublicRoute authed={this.state.authed} component={Login} />} />
               <Route path="/register" element={<PublicRoute authed={this.state.authed} component={Register} />} />
               <Route path="/dashboard" element={<PrivateRoute authed={this.state.authed} component={Dashboard} />} />
-              {/* <Route path="/viewer" element={<PrivateRoute authed={this.state.authed} component={Viewer} />} /> */}
+              <Route path="/viewer" element={<PrivateRoute authed={this.state.authed} component={Viewer} />} />
               <Route path="/user" element={<PrivateRoute authed={this.state.authed} component={UserPage} />} />
               <Route path="/projects" element={<PrivateRoute authed={this.state.authed} component={ProjectsPage} />} />
               <Route path="/projects/viewer/:id" element={<PrivateRoute authed={this.state.authed} component={Viewer} />} />

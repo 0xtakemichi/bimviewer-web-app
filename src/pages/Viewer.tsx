@@ -10,6 +10,7 @@ import load from "../components/Toolbars/Sections/Import";
 import help from "../components/Panels/Help";
 import camera from "../components/Toolbars/Sections/Camera";
 import selection from "../components/Toolbars/Sections/Selection";
+import miniMap from "../components/Panels/MiniMap"
 import { AppManager } from "../bim-components";
 
 const Viewer: React.FC = () => {
@@ -148,6 +149,8 @@ const Viewer: React.FC = () => {
         `;
       });
 
+      const miniMapComponent = miniMap(components, world);
+
       //const appContainer = document.getElementById("app") as HTMLElement
       const body = document.querySelector("body");
       //const app = document.querySelector("bim-grid") as BUI.Grid;
@@ -173,21 +176,25 @@ const Viewer: React.FC = () => {
       viewportGrid.layouts = {
         main: {
           template: `
-            "empty" 1fr
-            "toolbar" auto
-            /1fr
+            "empty miniMap" 1fr
+            "toolbar miniMap" auto
+            /1fr auto
           `,
-          elements: { toolbar },
+          elements: { 
+            toolbar,
+            miniMap: miniMapComponent
+          },
         },
         second: {
           template: `
-            "empty elementDataPanel" 1fr
-            "toolbar elementDataPanel" auto
-            /1fr 24rem
+            "empty elementDataPanel miniMap" 1fr
+            "toolbar elementDataPanel miniMap" auto
+            /1fr 24rem auto
           `,
           elements: {
             toolbar,
             elementDataPanel,
+            miniMap: miniMapComponent
           },
         },
       };

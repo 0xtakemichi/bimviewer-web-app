@@ -1,5 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Carousel, Card, Button, Container, Row, Col, Alert } from 'react-bootstrap';
+import { Carousel, Button, Container, Alert } from 'react-bootstrap';
+import Footer from '../components/Footer'; // Importar el nuevo Footer
+import ServicesSection from '../components/ServicesSection'; // Importar la nueva sección de servicios
 import { useState } from 'react';
 
 const Home = () => {
@@ -69,88 +71,11 @@ const Home = () => {
           </Carousel.Item>
         </Carousel>
 
-        {/* Servicios */}
-        <section id="services" className="services-section mb-5">
-          <h2 className="text-center mb-4">Nuestros Servicios</h2>
-          <Row xs={1} md={2} lg={3} className="g-4">
-            <Col>
-              <Card>
-                <Card.Body>
-                  <Card.Title>Modelación</Card.Title>
-                  <Card.Text>
-                    Desde estructuras hasta aguas servidas, nuestro equipo te ofrece soluciones personalizadas.
-                  </Card.Text>
-                  {/* <Button variant="outline-primary">Saber Más</Button> */}
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col>
-              <Card>
-                <Card.Body>
-                  <Card.Title>Animación 3D</Card.Title>
-                  <Card.Text>
-                    Muestra tus proyectos de infraestructura con impacto visual y claridad.
-                  </Card.Text>
-                  {/* <Button variant="outline-primary">Ver Ejemplos</Button> */}
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col>
-              <Card>
-                <Card.Body>
-                  <Card.Title>Recorridos Virtuales</Card.Title>
-                  <Card.Text>
-                    Vive tus proyectos en primera persona con tecnología avanzada.
-                  </Card.Text>
-                  {/* <Button variant="outline-primary">Experimentar</Button> */}
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col>
-              <Card>
-                <Card.Body>
-                  <Card.Title>Coordinación</Card.Title>
-                  <Card.Text>
-                    Gestión y coordinación BIM para proyectos de alta complejidad.
-                  </Card.Text>
-                  {/* <Button variant="outline-primary">Descubre Más</Button> */}
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col>
-              <Card>
-                <Card.Body>
-                  <Card.Title>Interferencias</Card.Title>
-                  <Card.Text>
-                    Detección precisa de interferencias para evitar problemas en la ejecución.
-                  </Card.Text>
-                  {/* <Button variant="outline-primary">Más Información</Button> */}
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        </section>
+        <ServicesSection />
 
-        {/* Información de Contacto */}
-        <section className="contact-section text-center">
-          <h2 className="mb-4">Contáctanos</h2>
-          <p>Teléfonos:</p>
-          <ul className="list-unstyled">
-            <li><a href="tel:+56984230810">+56984230810</a></li>
-            <li><a href="tel:+56992525535">+56992525535</a></li>
-          </ul>
-          <p>Email: <a href="mailto:contacto@ingenieriabim.cl">contacto@ingenieriabim.cl</a></p>
-          <p>Ubicación: Santiago de Chile</p>
-          <div className="social-media">
-            <Button variant="outline-info" href="https://www.linkedin.com/company/ingebim/" target="_blank">
-              LinkedIn
-            </Button>{' '}
-            <Button variant="outline-success" href="https://wa.me" target="_blank">
-              WhatsApp
-            </Button>
-          </div>
-        </section>
+
       </Container>
+      <Footer />
     </div>
   );
 };
